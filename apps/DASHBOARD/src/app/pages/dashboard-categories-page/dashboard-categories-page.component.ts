@@ -16,6 +16,7 @@ export class DashboardCategoriesPageComponent {
 
   protected readonly categories = signal<Array<Category & { movieCount: number }>>([]);
   protected readonly selectedId = signal<string | null>(null);
+  protected readonly isModalOpen = signal(false);
   protected readonly slugify = slugify;
   protected readonly form = this.fb.nonNullable.group({
     name: [''],
@@ -27,20 +28,30 @@ export class DashboardCategoriesPageComponent {
     this.refresh();
   }
 
-  edit(category: Category): void {
-    this.selectedId.set(category.id);
+  openModal(category?: Category): void {
+    this.isModalOpen.set(true);
+    this.selectedId.set(category?.id ?? null);
     this.form.patchValue({
-      name: category.name,
-      description: category.description ?? '',
-      color: category.color ?? '#4f46e5',
+      name: category?.name ?? '',
+      description: category?.description ?? '',
+      color: category?.color ?? '#4f46e5',
     });
+  }
+
+  closeModal(): void {
+    this.isModalOpen.set(false);
+    this.selectedId.set(null);
+    this.form.reset({ name: '', description: '', color: '#4f46e5' });
+  }
+
+  edit(category: Category): void {
+    this.openModal(category);
   }
 
   save(): void {
     const value = this.form.getRawValue();
     this.categoriesApi.save({ id: this.selectedId() ?? undefined, ...value }).subscribe(() => {
-      this.selectedId.set(null);
-      this.form.reset({ name: '', description: '', color: '#4f46e5' });
+      this.closeModal();
       this.refresh();
     });
   }

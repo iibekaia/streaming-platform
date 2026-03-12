@@ -20,6 +20,7 @@ export class DashboardMoviesPageComponent {
   protected readonly categories = signal<Category[]>([]);
   protected readonly selectedMovie = signal<Movie | null>(null);
   protected readonly selectedCategoryIds = signal<string[]>([]);
+  protected readonly isModalOpen = signal(false);
   protected readonly isImporting = signal(false);
   protected readonly importError = signal('');
   protected readonly formatPrice = formatPrice;
@@ -44,9 +45,11 @@ export class DashboardMoviesPageComponent {
     this.categoriesApi.list().subscribe((categories) => this.categories.set(categories));
   }
 
-  select(movie?: Movie): void {
+  openModal(movie?: Movie): void {
+    this.isModalOpen.set(true);
     this.selectedMovie.set(movie ?? null);
     this.selectedCategoryIds.set(movie?.categories ?? []);
+    this.importError.set('');
     this.form.patchValue({
       imdbId: movie?.imdbId ?? '',
       title: movie?.title ?? '',
@@ -60,6 +63,27 @@ export class DashboardMoviesPageComponent {
       rating: movie?.rating ?? 7,
       ticketPrice: movie?.ticketPrice ?? 8,
       status: movie?.status ?? 'draft',
+    });
+  }
+
+  closeModal(): void {
+    this.isModalOpen.set(false);
+    this.selectedMovie.set(null);
+    this.selectedCategoryIds.set([]);
+    this.importError.set('');
+    this.form.reset({
+      imdbId: '',
+      title: '',
+      description: '',
+      posterUrl: '',
+      videoUrl: '',
+      year: 2026,
+      duration: 100,
+      director: '',
+      cast: '',
+      rating: 7,
+      ticketPrice: 8,
+      status: 'draft',
     });
   }
 
@@ -118,7 +142,7 @@ export class DashboardMoviesPageComponent {
       ticketPrice: Number(value.ticketPrice),
       status: value.status as Movie['status'],
     }).subscribe(() => {
-      this.select();
+      this.closeModal();
       this.refresh();
     });
   }
