@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards
 import { Response } from 'express';
 import { AuthTokenResponse } from '@streaming-platform/data-models';
 import { BackendStore } from '../backend.store';
-import { LoginDto, RegisterDto } from './auth.dto';
+import { ChangePasswordDto, LoginDto, RegisterDto } from './auth.dto';
 import { RefreshGuard } from './refresh.guard';
 import { SessionGuard } from './session.guard';
 import { SessionRequest } from './session.types';
@@ -96,6 +96,13 @@ export class AuthController {
     this.store.logout(request.sessionToken!);
     response.clearCookie('sp_access', { path: '/' });
     response.clearCookie('sp_refresh', { path: '/' });
+    return { ok: true };
+  }
+
+  @Post('change-password')
+  @UseGuards(SessionGuard)
+  changePassword(@Req() request: SessionRequest, @Body() dto: ChangePasswordDto) {
+    this.store.changePassword(request.sessionToken!, dto.currentPassword, dto.nextPassword);
     return { ok: true };
   }
 }

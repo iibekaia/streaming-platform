@@ -21,6 +21,7 @@ export const appRoutes: Route[] = [
       { path: 'movies', loadComponent: () => import('./pages/platform-movies-page/platform-movies-page.component').then((m) => m.PlatformMoviesPageComponent) },
       { path: 'movies/:id', loadComponent: () => import('./pages/platform-movie-detail-page/platform-movie-detail-page.component').then((m) => m.PlatformMovieDetailPageComponent) },
       { path: 'plans', loadComponent: () => import('./pages/platform-plans-page/platform-plans-page.component').then((m) => m.PlatformPlansPageComponent) },
+      { path: 'account', loadComponent: () => import('./pages/platform-account-page/platform-account-page.component').then((m) => m.PlatformAccountPageComponent) },
     ],
   },
   { path: '**', redirectTo: 'movies' },

@@ -30,6 +30,16 @@ export class AuthApiService {
     return this.http.post<{ ok: true }>(`${this.baseUrl}/auth/logout`, {}, { withCredentials: true }).pipe(map(() => void 0));
   }
 
+  changePassword(currentPassword: string, nextPassword: string): Observable<void> {
+    return this.http
+      .post<{ ok: true }>(
+        `${this.baseUrl}/auth/change-password`,
+        { currentPassword, nextPassword },
+        { withCredentials: true },
+      )
+      .pipe(map(() => void 0));
+  }
+
   buyTicket(_: string, movieId: string): Observable<PurchaseResult> {
     return this.http.post<PurchaseResult>(`${this.baseUrl}/purchases/tickets/${movieId}`, {}, { withCredentials: true });
   }

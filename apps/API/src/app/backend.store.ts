@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   ActivityItem,
   AnalyticsSummary,
@@ -244,6 +244,16 @@ export class BackendStore {
       user.sessionToken = null;
     }
     this.refreshSessions.delete(sessionToken);
+  }
+
+  changePassword(sessionToken: string, currentPassword: string, nextPassword: string): void {
+    const user = this.users.find((item) => item.sessionToken === sessionToken);
+    if (!user || user.password !== currentPassword) {
+      throw new UnauthorizedException('Current password is incorrect.');
+    }
+
+    user.password = nextPassword;
+    user.lastActive = new Date().toISOString();
   }
 
   getMovies(search?: string, categoryIds?: string[], includeDrafts = false): Movie[] {

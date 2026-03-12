@@ -1,0 +1,139 @@
+<section class="space-y-8">
+  <div class="rounded-[2rem] bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-800 p-8 text-white">
+    <p class="text-sm uppercase tracking-[0.3em] text-indigo-200">Account</p>
+    <h1 class="mt-3 text-4xl font-semibold">{{ auth.user()?.displayName }}</h1>
+    <p class="mt-3 max-w-3xl text-slate-300">Manage your profile, keep track of favorites, and update your password from one place.</p>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+    <div class="space-y-6">
+      <article class="rounded-[2rem] bg-white p-6 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="rounded-2xl bg-indigo-50 p-3 text-indigo-600">
+            <svg siShieldCheckIcon class="h-6 w-6"></svg>
+          </div>
+          <div>
+            <h2 class="text-xl font-semibold text-slate-950">Profile</h2>
+            <p class="text-sm text-slate-500">Session-backed account details from your current login token.</p>
+          </div>
+        </div>
+        <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <div class="rounded-[1.5rem] border border-slate-200 p-4">
+            <p class="text-sm text-slate-500">Email</p>
+            <p class="mt-1 flex items-center gap-2 font-medium text-slate-900">
+              <svg siEnvelopeIcon class="h-4 w-4 text-slate-400"></svg>
+              {{ auth.user()?.email }}
+            </p>
+          </div>
+          <div class="rounded-[1.5rem] border border-slate-200 p-4">
+            <p class="text-sm text-slate-500">Plan</p>
+            <p class="mt-1 font-medium text-slate-900">{{ auth.hasUnlimited() ? 'UNLIMITED' : 'Free' }}</p>
+          </div>
+          <div class="rounded-[1.5rem] border border-slate-200 p-4">
+            <p class="text-sm text-slate-500">Joined</p>
+            <p class="mt-1 font-medium text-slate-900">{{ auth.user()?.createdAt | date: 'mediumDate' }}</p>
+          </div>
+          <div class="rounded-[1.5rem] border border-slate-200 p-4">
+            <p class="text-sm text-slate-500">Last active</p>
+            <p class="mt-1 font-medium text-slate-900">{{ auth.user()?.lastActive | date: 'medium' }}</p>
+          </div>
+          <div class="rounded-[1.5rem] border border-slate-200 p-4">
+            <p class="text-sm text-slate-500">Favorites</p>
+            <p class="mt-1 font-medium text-slate-900">{{ auth.favoriteCount() }} saved movies</p>
+          </div>
+          <div class="rounded-[1.5rem] border border-slate-200 p-4">
+            <p class="text-sm text-slate-500">Tickets</p>
+            <p class="mt-1 font-medium text-slate-900">{{ purchasedMovieCount() }} purchased movies</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="rounded-[2rem] bg-white p-6 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="rounded-2xl bg-rose-50 p-3 text-rose-600">
+            <svg siHeartIcon class="h-6 w-6"></svg>
+          </div>
+          <div>
+            <h2 class="text-xl font-semibold text-slate-950">Favorites</h2>
+            <p class="text-sm text-slate-500">Your saved movies are collected here for quick access.</p>
+          </div>
+        </div>
+
+        @if (loadingFavorites()) {
+          <div class="mt-6 flex justify-center rounded-[1.5rem] border border-slate-200 px-6 py-12">
+            <ui-spinner />
+          </div>
+        } @else if (!favoriteMovies().length) {
+          <div class="mt-6 rounded-[1.5rem] border border-dashed border-slate-300 px-6 py-12 text-center">
+            <h3 class="text-lg font-semibold text-slate-900">No favorite movies yet</h3>
+            <p class="mt-2 text-sm text-slate-500">Use the heart button on the catalog to save titles here.</p>
+            <a routerLink="/movies" class="mt-4 inline-flex rounded-2xl bg-slate-950 px-4 py-3 text-sm font-medium text-white">Browse movies</a>
+          </div>
+        } @else {
+          <div class="mt-6 space-y-4">
+            @for (movie of favoriteMovies(); track movie.id) {
+              <div class="grid gap-4 rounded-[1.5rem] border border-slate-200 p-4 md:grid-cols-[96px_1fr_auto] md:items-center">
+                <a [routerLink]="['/movies', movie.id]">
+                  <img [src]="movie.posterUrl" [alt]="movie.title" class="h-28 w-24 rounded-xl object-cover" />
+                </a>
+                <div>
+                  <a [routerLink]="['/movies', movie.id]" class="text-lg font-semibold text-slate-900">{{ movie.title }}</a>
+                  <p class="mt-1 text-sm text-slate-500">{{ movie.year }} • {{ formatRuntime(movie.duration) }} • {{ formatPrice(movie.ticketPrice) }}</p>
+                  <p class="mt-2 line-clamp-2 text-sm text-slate-600">{{ movie.description }}</p>
+                </div>
+                <div class="flex gap-2">
+                  <a [routerLink]="['/movies', movie.id]" class="rounded-xl border border-slate-200 px-3 py-2 text-sm text-slate-700">Open</a>
+                  <button type="button" class="rounded-xl border border-rose-200 px-3 py-2 text-sm text-rose-700" (click)="removeFavorite(movie.id)">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </article>
+    </div>
+
+    <article class="rounded-[2rem] bg-white p-6 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="rounded-2xl bg-amber-50 p-3 text-amber-600">
+          <svg siKeyIcon class="h-6 w-6"></svg>
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold text-slate-950">Reset password</h2>
+          <p class="text-sm text-slate-500">Change your current password for this account.</p>
+        </div>
+      </div>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="submitPasswordReset()" class="mt-6 space-y-4">
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-700">Current password</span>
+          <input type="password" formControlName="currentPassword" class="w-full rounded-2xl border border-slate-200 px-4 py-3" />
+        </label>
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-700">New password</span>
+          <input type="password" formControlName="nextPassword" class="w-full rounded-2xl border border-slate-200 px-4 py-3" />
+        </label>
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-700">Confirm new password</span>
+          <input type="password" formControlName="confirmPassword" class="w-full rounded-2xl border border-slate-200 px-4 py-3" />
+        </label>
+
+        @if (passwordError()) {
+          <p class="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">{{ passwordError() }}</p>
+        } @else {
+          <p class="text-sm text-slate-500">Use at least 8 characters. This updates the password immediately for future sign-ins.</p>
+        }
+
+        <button
+          type="submit"
+          class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 font-medium text-white disabled:opacity-60"
+          [disabled]="passwordForm.invalid || savingPassword()"
+        >
+          @if (savingPassword()) { <ui-spinner /> }
+          Update password
+        </button>
+      </form>
+    </article>
+  </div>
+</section>
