@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { AnalyticsSummary, PlanConfig, User } from '@streaming-platform/data-models';
+import { AnalyticsSummary, PaginatedResponse, PaginationQuery, PlanConfig, User } from '@streaming-platform/data-models';
 import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -12,8 +12,12 @@ export class AdminApiService {
     return this.http.get<AnalyticsSummary>(`${this.baseUrl}/analytics`, { withCredentials: true });
   }
 
-  listUsers(): Observable<Array<Omit<User, 'password'>>> {
-    return this.http.get<Array<Omit<User, 'password'>>>(`${this.baseUrl}/users`, { withCredentials: true });
+  listUsers(query: PaginationQuery = {}): Observable<PaginatedResponse<Omit<User, 'password'>>> {
+    const params = new URLSearchParams();
+    if (query.page) params.set('page', String(query.page));
+    if (query.pageSize) params.set('pageSize', String(query.pageSize));
+    const suffix = params.toString() ? `?${params.toString()}` : '';
+    return this.http.get<PaginatedResponse<Omit<User, 'password'>>>(`${this.baseUrl}/users${suffix}`, { withCredentials: true });
   }
 
   revokeSession(userId: string): Observable<void> {

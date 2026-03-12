@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CategoryApiService } from '@streaming-platform/api-services';
 import { Category } from '@streaming-platform/data-models';
@@ -17,7 +17,12 @@ export class DashboardCategoriesPageComponent {
   protected readonly categories = signal<Array<Category & { movieCount: number }>>([]);
   protected readonly selectedId = signal<string | null>(null);
   protected readonly isModalOpen = signal(false);
+  protected readonly page = signal(1);
+  protected readonly pageSize = 8;
+  protected readonly total = signal(0);
+  protected readonly totalPages = signal(1);
   protected readonly slugify = slugify;
+  protected readonly pageLabel = computed(() => `Page ${this.page()} of ${this.totalPages()}`);
   protected readonly form = this.fb.nonNullable.group({
     name: [''],
     description: [''],
@@ -60,7 +65,20 @@ export class DashboardCategoriesPageComponent {
     this.categoriesApi.delete(categoryId).subscribe(() => this.refresh());
   }
 
+  changePage(nextPage: number): void {
+    if (nextPage < 1 || nextPage > this.totalPages() || nextPage === this.page()) {
+      return;
+    }
+
+    this.page.set(nextPage);
+    this.refresh();
+  }
+
   private refresh(): void {
-    this.categoriesApi.list().subscribe((categories) => this.categories.set(categories));
+    this.categoriesApi.list({ page: this.page(), pageSize: this.pageSize }).subscribe((response) => {
+      this.categories.set(response.items);
+      this.total.set(response.total);
+      this.totalPages.set(response.totalPages);
+    });
   }
 }

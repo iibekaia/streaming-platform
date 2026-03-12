@@ -2,7 +2,22 @@ import { IsArray, IsBooleanString, IsIn, IsInt, IsNumber, IsOptional, IsString, 
 import { Transform, Type } from 'class-transformer';
 import { Movie } from '@streaming-platform/data-models';
 
-export class MoviesQueryDto {
+export class PaginationQueryDto {
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  pageSize?: number;
+}
+
+export class MoviesQueryDto extends PaginationQueryDto {
   @IsOptional()
   @IsString()
   search?: string;

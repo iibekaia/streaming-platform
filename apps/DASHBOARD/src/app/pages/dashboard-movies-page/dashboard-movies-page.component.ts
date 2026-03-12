@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { Category, Movie } from '@streaming-platform/data-models';
@@ -23,7 +23,12 @@ export class DashboardMoviesPageComponent {
   protected readonly isModalOpen = signal(false);
   protected readonly isImporting = signal(false);
   protected readonly importError = signal('');
+  protected readonly page = signal(1);
+  protected readonly pageSize = 8;
+  protected readonly total = signal(0);
+  protected readonly totalPages = signal(1);
   protected readonly formatPrice = formatPrice;
+  protected readonly pageLabel = computed(() => `Page ${this.page()} of ${this.totalPages()}`);
 
   protected readonly form = this.fb.nonNullable.group({
     imdbId: [''],
@@ -42,7 +47,7 @@ export class DashboardMoviesPageComponent {
 
   constructor() {
     this.refresh();
-    this.categoriesApi.list().subscribe((categories) => this.categories.set(categories));
+    this.categoriesApi.listAll().subscribe((categories) => this.categories.set(categories));
   }
 
   openModal(movie?: Movie): void {
@@ -151,6 +156,15 @@ export class DashboardMoviesPageComponent {
     this.moviesApi.delete(movieId).subscribe(() => this.refresh());
   }
 
+  changePage(nextPage: number): void {
+    if (nextPage < 1 || nextPage > this.totalPages() || nextPage === this.page()) {
+      return;
+    }
+
+    this.page.set(nextPage);
+    this.refresh();
+  }
+
   categoryNames(movie: Movie): string[] {
     return movie.categories
       .map((id) => this.categories().find((category) => category.id === id)?.name)
@@ -158,6 +172,12 @@ export class DashboardMoviesPageComponent {
   }
 
   private refresh(): void {
-    this.moviesApi.list({ includeDrafts: true }).subscribe((movies) => this.movies.set(movies));
+    this.moviesApi
+      .list({ includeDrafts: true, page: this.page(), pageSize: this.pageSize })
+      .subscribe((response) => {
+        this.movies.set(response.items);
+        this.total.set(response.total);
+        this.totalPages.set(response.totalPages);
+      });
   }
 }

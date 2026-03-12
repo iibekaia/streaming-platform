@@ -49,8 +49,8 @@ export class PlatformAccountPageComponent {
   });
 
   constructor() {
-    this.moviesApi.list().subscribe((movies) => {
-      this.allMovies.set(movies);
+    this.moviesApi.list({ page: 1, pageSize: 200 }).subscribe((response) => {
+      this.allMovies.set(response.items);
       this.loadingFavorites.set(false);
     });
   }

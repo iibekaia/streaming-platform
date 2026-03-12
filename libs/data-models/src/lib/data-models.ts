@@ -106,6 +106,21 @@ export interface MovieQuery {
   search?: string;
   categoryIds?: string[];
   includeDrafts?: boolean;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface PaginationQuery {
+  page?: number;
+  pageSize?: number;
+}
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
 }
 
 export interface AuthSession {

@@ -5,6 +5,7 @@ import {
   AuthSession,
   Category,
   Movie,
+  PaginatedResponse,
   Plan,
   PlanConfig,
   PurchaseResult,
@@ -256,8 +257,8 @@ export class BackendStore {
     user.lastActive = new Date().toISOString();
   }
 
-  getMovies(search?: string, categoryIds?: string[], includeDrafts = false): Movie[] {
-    return this.movies.filter((movie) => {
+  getMovies(search?: string, categoryIds?: string[], includeDrafts = false, page = 1, pageSize = 12): PaginatedResponse<Movie> {
+    const filtered = this.movies.filter((movie) => {
       if (!includeDrafts && movie.status !== 'published') {
         return false;
       }
@@ -269,17 +270,21 @@ export class BackendStore {
       }
       return true;
     });
+
+    return this.paginate(filtered, page, pageSize);
   }
 
   getMovieById(id: string): Movie | undefined {
     return this.movies.find((movie) => movie.id === id);
   }
 
-  getCategories(): Array<Category & { movieCount: number }> {
-    return this.categories.map((category) => ({
+  getCategories(page = 1, pageSize = 50): PaginatedResponse<Category & { movieCount: number }> {
+    const items = this.categories.map((category) => ({
       ...category,
       movieCount: this.movies.filter((movie) => movie.categories.includes(category.id)).length,
     }));
+
+    return this.paginate(items, page, pageSize);
   }
 
   buyTicket(userId: string, movieId: string): PurchaseResult {
@@ -313,8 +318,9 @@ export class BackendStore {
     return this.entitlements(userId);
   }
 
-  listUsers(): Array<Omit<User, 'password'>> {
-    return this.users.map((user) => this.getSanitizedUser(user));
+  listUsers(page = 1, pageSize = 10): PaginatedResponse<Omit<User, 'password'>> {
+    const users = this.users.map((user) => this.getSanitizedUser(user));
+    return this.paginate(users, page, pageSize);
   }
 
   revokeSession(userId: string): void {
@@ -464,6 +470,22 @@ export class BackendStore {
         sessionToken: user.sessionToken!,
         lastValidatedAt: new Date().toISOString(),
       },
+    };
+  }
+
+  private paginate<T>(items: T[], page = 1, pageSize = 12): PaginatedResponse<T> {
+    const safePage = Math.max(1, page);
+    const safePageSize = Math.max(1, pageSize);
+    const total = items.length;
+    const totalPages = Math.max(1, Math.ceil(total / safePageSize));
+    const start = (safePage - 1) * safePageSize;
+
+    return {
+      items: items.slice(start, start + safePageSize),
+      page: safePage,
+      pageSize: safePageSize,
+      total,
+      totalPages,
     };
   }
 }

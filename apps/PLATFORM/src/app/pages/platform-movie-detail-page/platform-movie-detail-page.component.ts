@@ -30,7 +30,7 @@ export class PlatformMovieDetailPageComponent {
   protected readonly canWatch = computed(() => !!this.movie() && this.auth.hasMovieAccess(this.movie()!.id));
 
   constructor() {
-    this.categoriesApi.list().subscribe((categories) => this.categories.set(categories));
+    this.categoriesApi.listAll().subscribe((categories) => this.categories.set(categories));
     this.moviesApi.getById(this.route.snapshot.params['id']).subscribe((movie) => {
       this.movie.set(movie);
       this.loading.set(false);

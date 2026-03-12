@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { BackendStore } from '../backend.store';
 import { AdminGuard } from '../auth/admin.guard';
 import { SessionGuard } from '../auth/session.guard';
 import { PlanConfig } from '@streaming-platform/data-models';
+import { PaginationQueryDto } from '../catalog/catalog.dto';
 
 @Controller('admin')
 @UseGuards(SessionGuard, AdminGuard)
@@ -15,8 +16,8 @@ export class AdminController {
   }
 
   @Get('users')
-  users() {
-    return this.store.listUsers();
+  users(@Query() query: PaginationQueryDto) {
+    return this.store.listUsers(query.page, query.pageSize);
   }
 
   @Post('users/:id/revoke-session')

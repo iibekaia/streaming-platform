@@ -1,15 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Category } from '@streaming-platform/data-models';
-import { Observable } from 'rxjs';
+import { Category, PaginatedResponse, PaginationQuery } from '@streaming-platform/data-models';
+import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CategoryApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = 'http://localhost:3000/api';
 
-  list(): Observable<Array<Category & { movieCount: number }>> {
-    return this.http.get<Array<Category & { movieCount: number }>>(`${this.baseUrl}/categories`, { withCredentials: true });
+  list(query: PaginationQuery = {}): Observable<PaginatedResponse<Category & { movieCount: number }>> {
+    const params = new URLSearchParams();
+    if (query.page) params.set('page', String(query.page));
+    if (query.pageSize) params.set('pageSize', String(query.pageSize));
+    const suffix = params.toString() ? `?${params.toString()}` : '';
+    return this.http.get<PaginatedResponse<Category & { movieCount: number }>>(`${this.baseUrl}/categories${suffix}`, { withCredentials: true });
+  }
+
+  listAll(): Observable<Array<Category & { movieCount: number }>> {
+    return this.list({ page: 1, pageSize: 100 }).pipe(map((response) => response.items));
   }
 
   save(category: Partial<Category> & Pick<Category, 'name'>): Observable<Category> {

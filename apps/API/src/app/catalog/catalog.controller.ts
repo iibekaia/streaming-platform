@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { BackendStore } from '../backend.store';
-import { MoviesQueryDto, SaveCategoryDto, SaveMovieDto } from './catalog.dto';
+import { MoviesQueryDto, PaginationQueryDto, SaveCategoryDto, SaveMovieDto } from './catalog.dto';
 import { AdminGuard } from '../auth/admin.guard';
 import { SessionGuard } from '../auth/session.guard';
 import { OmdbService } from './omdb.service';
@@ -14,7 +14,7 @@ export class CatalogController {
 
   @Get('movies')
   listMovies(@Query() query: MoviesQueryDto) {
-    return this.store.getMovies(query.search, query.categoryIds, query.includeDrafts === 'true');
+    return this.store.getMovies(query.search, query.categoryIds, query.includeDrafts === 'true', query.page, query.pageSize);
   }
 
   @Get('movies/:id')
@@ -23,8 +23,8 @@ export class CatalogController {
   }
 
   @Get('categories')
-  listCategories() {
-    return this.store.getCategories();
+  listCategories(@Query() query: PaginationQueryDto) {
+    return this.store.getCategories(query.page, query.pageSize);
   }
 
   @UseGuards(SessionGuard, AdminGuard)

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
@@ -26,12 +26,17 @@ export class PlatformMoviesPageComponent {
   protected readonly categories = signal<Category[]>([]);
   protected readonly selectedCategories = signal<string[]>([]);
   protected readonly search = signal('');
+  protected readonly page = signal(1);
+  protected readonly pageSize = 12;
+  protected readonly total = signal(0);
+  protected readonly totalPages = signal(1);
   protected readonly loading = signal(true);
   protected readonly formatRuntime = formatRuntime;
   protected readonly formatPrice = formatPrice;
+  protected readonly pageLabel = computed(() => `Page ${this.page()} of ${this.totalPages()}`);
 
   constructor() {
-    this.categoriesApi.list().subscribe((categories) => this.categories.set(categories));
+    this.categoriesApi.listAll().subscribe((categories) => this.categories.set(categories));
     this.searchChanges
       .pipe(
         debounceTime(300),
@@ -40,12 +45,16 @@ export class PlatformMoviesPageComponent {
           this.moviesApi.list({
             search: value,
             categoryIds: this.selectedCategories(),
+            page: this.page(),
+            pageSize: this.pageSize,
           }),
         ),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe((movies) => {
-        this.movies.set(movies);
+      .subscribe((response) => {
+        this.movies.set(response.items);
+        this.total.set(response.total);
+        this.totalPages.set(response.totalPages);
         this.loading.set(false);
       });
 
@@ -54,6 +63,7 @@ export class PlatformMoviesPageComponent {
 
   onSearch(value: string): void {
     this.search.set(value);
+    this.page.set(1);
     this.loading.set(true);
     this.searchChanges.next(value);
   }
@@ -63,6 +73,16 @@ export class PlatformMoviesPageComponent {
     this.selectedCategories.set(
       current.includes(categoryId) ? current.filter((id) => id !== categoryId) : [...current, categoryId],
     );
+    this.page.set(1);
+    this.refresh();
+  }
+
+  changePage(nextPage: number): void {
+    if (nextPage < 1 || nextPage > this.totalPages() || nextPage === this.page()) {
+      return;
+    }
+
+    this.page.set(nextPage);
     this.refresh();
   }
 
@@ -81,9 +101,11 @@ export class PlatformMoviesPageComponent {
   private refresh(): void {
     this.loading.set(true);
     this.moviesApi
-      .list({ search: this.search(), categoryIds: this.selectedCategories() })
-      .subscribe((movies) => {
-        this.movies.set(movies);
+      .list({ search: this.search(), categoryIds: this.selectedCategories(), page: this.page(), pageSize: this.pageSize })
+      .subscribe((response) => {
+        this.movies.set(response.items);
+        this.total.set(response.total);
+        this.totalPages.set(response.totalPages);
         this.loading.set(false);
       });
   }

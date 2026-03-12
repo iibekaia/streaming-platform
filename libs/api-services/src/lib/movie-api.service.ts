@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Movie, MovieQuery } from '@streaming-platform/data-models';
+import { Movie, MovieQuery, PaginatedResponse } from '@streaming-platform/data-models';
 import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -8,12 +8,14 @@ export class MovieApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = 'http://localhost:3000/api';
 
-  list(query: MovieQuery = {}): Observable<Movie[]> {
+  list(query: MovieQuery = {}): Observable<PaginatedResponse<Movie>> {
     let params = new HttpParams();
     if (query.search) params = params.set('search', query.search);
     if (query.categoryIds?.length) params = params.set('categoryIds', query.categoryIds.join(','));
     if (query.includeDrafts) params = params.set('includeDrafts', 'true');
-    return this.http.get<Movie[]>(`${this.baseUrl}/movies`, { params, withCredentials: true });
+    if (query.page) params = params.set('page', String(query.page));
+    if (query.pageSize) params = params.set('pageSize', String(query.pageSize));
+    return this.http.get<PaginatedResponse<Movie>>(`${this.baseUrl}/movies`, { params, withCredentials: true });
   }
 
   getById(id: string): Observable<Movie | undefined> {
