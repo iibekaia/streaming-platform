@@ -21,8 +21,8 @@ export class DashboardLoginPageComponent {
   protected readonly error = signal<string | null>(null);
   protected readonly loading = signal(false);
   protected readonly form = this.fb.nonNullable.group({
-    email: ['admin@example.com', [Validators.required, Validators.email]],
-    password: ['Admin123!', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
   });
 
   submit(): void {
