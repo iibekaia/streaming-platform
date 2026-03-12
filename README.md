@@ -1,96 +1,177 @@
-# StreamingPlatform
+# Streaming Platform
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Full-stack streaming platform built in an Nx monorepo with:
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+- `PLATFORM`: user-facing Angular app
+- `DASHBOARD`: admin Angular app
+- `API`: NestJS backend
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+The workspace also contains shared Nx libraries for auth, API services, data models, UI components, and utilities.
 
-## Run tasks
+## Stack
 
-To run tasks with Nx use:
+- Nx monorepo
+- Angular 20 standalone apps
+- NestJS 11 API
+- TypeScript
+- Tailwind CSS + SCSS
+- RxJS
+- JWT auth with `httpOnly` cookies
+- Heroicons via `@semantic-icons/heroicons`
 
-```sh
-npx nx <target> <project-name>
+## Projects
+
+- `apps/PLATFORM`
+  - customer app for browsing movies, buying tickets, and watching content
+- `apps/DASHBOARD`
+  - admin app for managing movies, categories, users, plans, and IMDb imports
+- `apps/API`
+  - backend API for auth, catalog, purchases, admin data, and IMDb metadata import
+- `libs/auth-lib`
+  - auth store, guards, interceptor, session restore
+- `libs/api-services`
+  - Angular HTTP services for backend integration
+- `libs/data-models`
+  - shared TypeScript models
+- `libs/ui-components`
+  - shared UI elements
+- `libs/utils`
+  - shared helpers and formatters
+
+## Requirements
+
+- Node.js 20+
+- npm 10+
+
+## Installation
+
+```bash
+npm install
 ```
 
-For example:
+## Environment Setup
 
-```sh
-npx nx build myproject
+The API can import movie metadata by IMDb id through OMDb.
+
+1. Create the API env file:
+
+```bash
+cp apps/API/.env.example apps/API/.env
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+2. Add your OMDb API key:
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
+```env
+OMDB_API_KEY=your_omdb_api_key
 ```
 
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
+Without `OMDB_API_KEY`, the apps still run, but the dashboard IMDb import action will fail.
 
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
+## How To Start
 
-# Generate a library
-npx nx g @nx/react:lib some-lib
+Start each project in a separate terminal.
+
+### 1. Start the API
+
+```bash
+npm run start:api
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+API URL:
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+```text
+http://localhost:3000/api
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+### 2. Start PLATFORM
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
+```bash
+npm run start:platform
 ```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Open:
 
-## Install Nx Console
+```text
+http://localhost:4200
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+### 3. Start DASHBOARD
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+npm run start:dashboard
+```
 
-## Useful links
+Open:
 
-Learn more:
+```text
+http://localhost:4201
+```
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+The API is configured for local CORS access from `http://localhost:4200` and `http://localhost:4201`.
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Demo Credentials
+
+### PLATFORM
+
+- `ava@example.com / Password123!`
+- `admin@example.com / Admin123!`
+
+### DASHBOARD
+
+- `admin@example.com / Admin123!`
+
+## Main Features
+
+### PLATFORM
+
+- login and register
+- JWT session restore on app reload
+- movie list with search and category filters
+- movie detail page with access gate
+- ticket purchase and unlimited plan flow
+- favorites with heart icons
+
+### DASHBOARD
+
+- admin-only login
+- movie CRUD
+- category management
+- user management
+- plan configuration
+- analytics overview
+- IMDb id field with metadata import into the movie form
+
+### API
+
+- auth with access token and refresh token cookies
+- session validation and single-session enforcement
+- movie, category, purchase, analytics, and admin endpoints
+- seeded in-memory catalog and user data
+
+## IMDb / OMDb Import
+
+Movies can exist in two forms:
+
+- IMDb-backed movies: save an `imdbId` and use the dashboard import action to populate fields
+- custom movies: create them manually without an `imdbId`
+
+Current implementation details:
+
+- the seed catalog contains 50 movies with IMDb ids
+- the dashboard fetches metadata through the Nest API
+- the Nest API calls OMDb by IMDb id
+- imported fields remain editable before saving
+
+## Build Commands
+
+```bash
+npx nx build API --configuration=development
+npx nx build PLATFORM --configuration=development
+npx nx build DASHBOARD --configuration=development
+```
+
+## Notes
+
+- The backend currently uses in-memory storage. Restarting the API resets users, sessions, movies, purchases, and configuration back to the seeded state.
+- Auth is cookie-based. The frontend apps should run against the local API for login and session validation to work.
+- If only one Angular app is running it will usually use `4200`. When both are running, the second one should be available on `4201`.
