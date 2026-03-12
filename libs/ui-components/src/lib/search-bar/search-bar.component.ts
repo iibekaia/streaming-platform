@@ -1,10 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SiMagnifyingGlassIcon } from '@semantic-icons/heroicons/24/outline';
 
 @Component({
   selector: 'ui-search-bar',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SiMagnifyingGlassIcon],
   templateUrl: './search-bar.component.html',
 })
 export class SearchBarComponent {
