@@ -1,0 +1,82 @@
+{
+  "common": {
+    "loading": "Завантаження",
+    "cancel": "Скасувати",
+    "close": "Закрити",
+    "save": "Зберегти",
+    "next": "Далі",
+    "previous": "Назад",
+    "search": "Пошук",
+    "signOut": "Вийти",
+    "continue": "Продовжити"
+  },
+  "nav": {
+    "dashboard": "Панель",
+    "movies": "Фільми",
+    "plans": "Плани",
+    "account": "Акаунт",
+    "categories": "Категорії",
+    "users": "Користувачі"
+  },
+  "auth": {
+    "signIn": "Увійти",
+    "createAccount": "Створити акаунт",
+    "newHere": "Ви тут уперше?",
+    "alreadyHaveAccount": "Уже маєте акаунт?",
+    "register": "Зареєструватися",
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "confirmPassword": "Підтвердіть пароль",
+    "displayName": "Відображуване ім'я"
+  },
+  "movies": {
+    "catalog": "Каталог",
+    "browseTitle": "Переглядайте, фільтруйте й дивіться так, як вам зручно.",
+    "noResultsTitle": "За цими фільтрами фільмів не знайдено",
+    "noResultsText": "Спробуйте ширший пошук або приберіть одну з вибраних категорій.",
+    "favorites": "Обране",
+    "ticket": "квиток",
+    "watchNow": "Дивитися зараз",
+    "buyTicket": "Купити квиток",
+    "getUnlimited": "Отримати UNLIMITED"
+  },
+  "plans": {
+    "title": "Оберіть, як ви хочете дивитися",
+    "free": "Безкоштовно",
+    "unlimited": "UNLIMITED",
+    "monthly": "на місяць"
+  },
+  "account": {
+    "title": "Акаунт",
+    "profile": "Профіль",
+    "favorites": "Обране",
+    "resetPassword": "Змінити пароль",
+    "currentPassword": "Поточний пароль",
+    "newPassword": "Новий пароль",
+    "confirmNewPassword": "Підтвердіть новий пароль",
+    "updatePassword": "Оновити пароль",
+    "joined": "Дата реєстрації",
+    "lastActive": "Остання активність",
+    "tickets": "Квитки",
+    "savedMovies": "збережених фільмів",
+    "purchasedMovies": "придбаних фільмів",
+    "noFavoritesTitle": "У вас ще немає обраних фільмів",
+    "noFavoritesText": "Використовуйте кнопку з серцем у каталозі, щоб зберігати фільми тут.",
+    "browseMovies": "Переглянути фільми",
+    "remove": "Видалити",
+    "open": "Відкрити"
+  },
+  "footer": {
+    "product": "Продукт",
+    "platformTitle": "Стрімінг-платформа",
+    "platformDescription": "Переглядайте фільми, керуйте доступом і тримайте свій список упорядкованим.",
+    "dashboardTitle": "Стрімінг-панель",
+    "dashboardDescription": "Керуйте каталогом, цінами та користувачами в одному адмін-просторі.",
+    "quickLinks": "Швидкі посилання",
+    "language": "Мова",
+    "languageHint": "Вибір мови зберігається на цьому пристрої.",
+    "rights": "Усі права захищено.",
+    "builtWith": "Створено з Angular, NestJS та Nx.",
+    "signedInAs": "Увійшли як"
+  }
+}

@@ -3,16 +3,16 @@
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
       <div>
         <a routerLink="/movies" class="text-lg font-semibold text-slate-950">PLATFORM</a>
-        <p class="text-sm text-slate-500">Modern streaming storefront</p>
+        <p class="text-sm text-slate-500">{{ 'footer.platformDescription' | t : 'Modern streaming storefront' }}</p>
       </div>
       <nav class="hidden gap-6 text-sm font-medium text-slate-600 md:flex">
         <a routerLink="/movies" routerLinkActive="text-indigo-600" class="inline-flex items-center gap-2">
           <svg siFilmIcon class="h-5 w-5"></svg>
-          Movies
+          {{ 'nav.movies' | t : 'Movies' }}
         </a>
         <a routerLink="/plans" routerLinkActive="text-indigo-600" class="inline-flex items-center gap-2">
           <svg siPlayCircleIcon class="h-5 w-5"></svg>
-          Plans
+          {{ 'nav.plans' | t : 'Plans' }}
         </a>
       </nav>
       <div class="flex items-center gap-3">
@@ -23,7 +23,7 @@
         </a>
         <button class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-700" (click)="logout()">
           <svg siArrowLeftOnRectangleIcon class="h-4 w-4"></svg>
-          Sign out
+          {{ 'common.signOut' | t : 'Sign out' }}
         </button>
       </div>
     </div>
@@ -35,5 +35,6 @@
   </header>
   <main class="mx-auto max-w-7xl px-6 py-8">
     <router-outlet />
+    <ui-footer variant="platform" />
   </main>
 </div>

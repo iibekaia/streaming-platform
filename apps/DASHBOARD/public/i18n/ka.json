@@ -1,0 +1,74 @@
+{
+  "common": {
+    "loading": "იტვირთება",
+    "save": "შენახვა",
+    "cancel": "გაუქმება",
+    "close": "დახურვა",
+    "next": "შემდეგი",
+    "previous": "წინა",
+    "edit": "რედაქტირება",
+    "delete": "წაშლა"
+  },
+  "nav": {
+    "dashboard": "დაფა",
+    "movies": "ფილმები",
+    "categories": "კატეგორიები",
+    "users": "მომხმარებლები",
+    "plans": "პაკეტები"
+  },
+  "auth": {
+    "admin": "ადმინი",
+    "signIn": "დაფაში შესვლა",
+    "email": "ელფოსტა",
+    "password": "პაროლი",
+    "enterDashboard": "დაფაში შესვლა"
+  },
+  "dashboard": {
+    "analytics": "ანალიტიკა",
+    "recentActivity": "ბოლო აქტივობა",
+    "totalUsers": "მომხმარებლების რაოდენობა",
+    "activeSubscriptions": "აქტიური გამოწერები",
+    "ticketsSold": "გაყიდული ბილეთები",
+    "revenue": "შემოსავალი"
+  },
+  "movies": {
+    "title": "ფილმები",
+    "addMovie": "ფილმის დამატება",
+    "editMovie": "ფილმის რედაქტირება",
+    "imdbImport": "IMDb იმპორტი",
+    "fetchDetails": "დეტალების მიღება",
+    "customCatalogEntry": "მორგებული კატალოგის ჩანაწერი"
+  },
+  "categories": {
+    "title": "კატეგორიები",
+    "addCategory": "კატეგორიის დამატება",
+    "createCategory": "კატეგორიის შექმნა",
+    "editCategory": "კატეგორიის რედაქტირება",
+    "movieCount": "ფილმი"
+  },
+  "users": {
+    "title": "მომხმარებლები",
+    "revokeSession": "სესიის გაუქმება",
+    "toggleStatus": "სტატუსის შეცვლა",
+    "active": "აქტიური",
+    "suspended": "შეჩერებული"
+  },
+  "plans": {
+    "title": "პაკეტები",
+    "unlimitedPrice": "UNLIMITED-ის ფასი",
+    "ticketPrice": "ბილეთის სტანდარტული ფასი"
+  },
+  "footer": {
+    "product": "პროდუქტი",
+    "platformTitle": "სტრიმინგ პლატფორმა",
+    "platformDescription": "უყურე საყვარე ფილმებს.",
+    "dashboardTitle": "სტრიმინგ დაფა",
+    "dashboardDescription": "მართეთ კატალოგი, ფასები და მომხმარებლები ერთ ადმინისტრაციულ სივრცეში.",
+    "quickLinks": "სწრაფი ბმულები",
+    "language": "ენა",
+    "languageHint": "ენის არჩევანი ამ მოწყობილობაზე ინახება.",
+    "rights": "ყველა უფლება დაცულია.",
+    "builtWith": "შექმნილია Angular, NestJS და Nx-ით.",
+    "signedInAs": "შესულია როგორც"
+  }
+}

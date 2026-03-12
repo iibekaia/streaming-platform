@@ -1,0 +1,74 @@
+{
+  "common": {
+    "loading": "Завантаження",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "close": "Закрити",
+    "next": "Далі",
+    "previous": "Назад",
+    "edit": "Редагувати",
+    "delete": "Видалити"
+  },
+  "nav": {
+    "dashboard": "Панель",
+    "movies": "Фільми",
+    "categories": "Категорії",
+    "users": "Користувачі",
+    "plans": "Плани"
+  },
+  "auth": {
+    "admin": "Адмін",
+    "signIn": "Вхід до панелі",
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "enterDashboard": "Увійти до панелі"
+  },
+  "dashboard": {
+    "analytics": "Аналітика",
+    "recentActivity": "Остання активність",
+    "totalUsers": "Усього користувачів",
+    "activeSubscriptions": "Активні підписки",
+    "ticketsSold": "Продано квитків",
+    "revenue": "Дохід"
+  },
+  "movies": {
+    "title": "Фільми",
+    "addMovie": "Додати фільм",
+    "editMovie": "Редагувати фільм",
+    "imdbImport": "Імпорт IMDb",
+    "fetchDetails": "Отримати деталі",
+    "customCatalogEntry": "Власний запис каталогу"
+  },
+  "categories": {
+    "title": "Категорії",
+    "addCategory": "Додати категорію",
+    "createCategory": "Створити категорію",
+    "editCategory": "Редагувати категорію",
+    "movieCount": "фільмів"
+  },
+  "users": {
+    "title": "Користувачі",
+    "revokeSession": "Скасувати сесію",
+    "toggleStatus": "Змінити статус",
+    "active": "активний",
+    "suspended": "призупинений"
+  },
+  "plans": {
+    "title": "Плани",
+    "unlimitedPrice": "Ціна UNLIMITED",
+    "ticketPrice": "Стандартна ціна квитка"
+  },
+  "footer": {
+    "product": "Продукт",
+    "platformTitle": "Стрімінг-платформа",
+    "platformDescription": "Переглядайте фільми, керуйте доступом і тримайте свій список упорядкованим.",
+    "dashboardTitle": "Стрімінг-панель",
+    "dashboardDescription": "Керуйте каталогом, цінами та користувачами в одному адмін-просторі.",
+    "quickLinks": "Швидкі посилання",
+    "language": "Мова",
+    "languageHint": "Вибір мови зберігається на цьому пристрої.",
+    "rights": "Усі права захищено.",
+    "builtWith": "Створено з Angular, NestJS та Nx.",
+    "signedInAs": "Увійшли як"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "common": {
+    "loading": "Loading",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "movies": "Movies",
+    "categories": "Categories",
+    "users": "Users",
+    "plans": "Plans"
+  },
+  "auth": {
+    "admin": "Admin",
+    "signIn": "Dashboard sign in",
+    "email": "Email",
+    "password": "Password",
+    "enterDashboard": "Enter dashboard"
+  },
+  "dashboard": {
+    "analytics": "Analytics",
+    "recentActivity": "Recent activity",
+    "totalUsers": "Total users",
+    "activeSubscriptions": "Active subscriptions",
+    "ticketsSold": "Tickets sold",
+    "revenue": "Revenue"
+  },
+  "movies": {
+    "title": "Movies",
+    "addMovie": "Add movie",
+    "editMovie": "Edit movie",
+    "imdbImport": "IMDb import",
+    "fetchDetails": "Fetch details",
+    "customCatalogEntry": "Custom catalog entry"
+  },
+  "categories": {
+    "title": "Categories",
+    "addCategory": "Add category",
+    "createCategory": "Create category",
+    "editCategory": "Edit category",
+    "movieCount": "movies"
+  },
+  "users": {
+    "title": "Users",
+    "revokeSession": "Revoke session",
+    "toggleStatus": "Toggle status",
+    "active": "active",
+    "suspended": "suspended"
+  },
+  "plans": {
+    "title": "Plans",
+    "unlimitedPrice": "UNLIMITED price",
+    "ticketPrice": "Default ticket price"
+  },
+  "footer": {
+    "product": "Product",
+    "platformTitle": "Streaming Platform",
+    "platformDescription": "Browse films, manage access, and keep your watchlist organized.",
+    "dashboardTitle": "Streaming Dashboard",
+    "dashboardDescription": "Operate catalog, pricing, and users from one admin workspace.",
+    "quickLinks": "Quick links",
+    "language": "Language",
+    "languageHint": "Language preference is saved on this device.",
+    "rights": "All rights reserved.",
+    "builtWith": "Built with Angular, NestJS, and Nx.",
+    "signedInAs": "Signed in as"
+  }
+}

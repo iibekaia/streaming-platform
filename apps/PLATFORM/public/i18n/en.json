@@ -1,0 +1,82 @@
+{
+  "common": {
+    "loading": "Loading",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "signOut": "Sign out",
+    "continue": "Continue"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "movies": "Movies",
+    "plans": "Plans",
+    "account": "Account",
+    "categories": "Categories",
+    "users": "Users"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "createAccount": "Create your account",
+    "newHere": "New here?",
+    "alreadyHaveAccount": "Already have an account?",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "displayName": "Display name"
+  },
+  "movies": {
+    "catalog": "Catalog",
+    "browseTitle": "Browse, filter, and watch on your terms.",
+    "noResultsTitle": "No movies match those filters",
+    "noResultsText": "Try a broader search or clear one of the selected categories.",
+    "favorites": "Favorites",
+    "ticket": "ticket",
+    "watchNow": "Watch now",
+    "buyTicket": "Buy ticket",
+    "getUnlimited": "Get UNLIMITED"
+  },
+  "plans": {
+    "title": "Choose how you want to watch",
+    "free": "Free",
+    "unlimited": "UNLIMITED",
+    "monthly": "monthly"
+  },
+  "account": {
+    "title": "Account",
+    "profile": "Profile",
+    "favorites": "Favorites",
+    "resetPassword": "Reset password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "updatePassword": "Update password",
+    "joined": "Joined",
+    "lastActive": "Last active",
+    "tickets": "Tickets",
+    "savedMovies": "saved movies",
+    "purchasedMovies": "purchased movies",
+    "noFavoritesTitle": "No favorite movies yet",
+    "noFavoritesText": "Use the heart button on the catalog to save titles here.",
+    "browseMovies": "Browse movies",
+    "remove": "Remove",
+    "open": "Open"
+  },
+  "footer": {
+    "product": "Product",
+    "platformTitle": "Streaming Platform",
+    "platformDescription": "Browse films, manage access, and keep your watchlist organized.",
+    "dashboardTitle": "Streaming Dashboard",
+    "dashboardDescription": "Operate catalog, pricing, and users from one admin workspace.",
+    "quickLinks": "Quick links",
+    "language": "Language",
+    "languageHint": "Language preference is saved on this device.",
+    "rights": "All rights reserved.",
+    "builtWith": "Built with Angular, NestJS, and Nx.",
+    "signedInAs": "Signed in as"
+  }
+}

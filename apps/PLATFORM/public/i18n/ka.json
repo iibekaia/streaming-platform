@@ -1,0 +1,82 @@
+{
+  "common": {
+    "loading": "იტვირთება",
+    "cancel": "გაუქმება",
+    "close": "დახურვა",
+    "save": "შენახვა",
+    "next": "შემდეგი",
+    "previous": "წინა",
+    "search": "ძიება",
+    "signOut": "გასვლა",
+    "continue": "გაგრძელება"
+  },
+  "nav": {
+    "dashboard": "დაფა",
+    "movies": "ფილმები",
+    "plans": "პაკეტები",
+    "account": "ანგარიში",
+    "categories": "კატეგორიები",
+    "users": "მომხმარებლები"
+  },
+  "auth": {
+    "signIn": "შესვლა",
+    "createAccount": "ანგარიშის შექმნა",
+    "newHere": "ახლახან მოხვდით აქ?",
+    "alreadyHaveAccount": "უკვე გაქვთ ანგარიში?",
+    "register": "რეგისტრაცია",
+    "email": "ელფოსტა",
+    "password": "პაროლი",
+    "confirmPassword": "პაროლის დადასტურება",
+    "displayName": "საჩვენებელი სახელი"
+  },
+  "movies": {
+    "catalog": "კატალოგი",
+    "browseTitle": "დაათვალიერეთ, გაფილტრეთ და უყურეთ თქვენთვის სასურველი ფორმით.",
+    "noResultsTitle": "ამ ფილტრებით ფილმები ვერ მოიძებნა",
+    "noResultsText": "სცადეთ უფრო ფართო ძიება ან გააუქმეთ რომელიმე არჩეული კატეგორია.",
+    "favorites": "რჩეულები",
+    "ticket": "ბილეთი",
+    "watchNow": "ახლავე ყურება",
+    "buyTicket": "ბილეთის ყიდვა",
+    "getUnlimited": "UNLIMITED-ის აღება"
+  },
+  "plans": {
+    "title": "აირჩიეთ როგორ გსურთ ყურება",
+    "free": "უფასო",
+    "unlimited": "UNLIMITED",
+    "monthly": "თვეში"
+  },
+  "account": {
+    "title": "ანგარიში",
+    "profile": "პროფილი",
+    "favorites": "რჩეულები",
+    "resetPassword": "პაროლის შეცვლა",
+    "currentPassword": "მიმდინარე პაროლი",
+    "newPassword": "ახალი პაროლი",
+    "confirmNewPassword": "ახალი პაროლის დადასტურება",
+    "updatePassword": "პაროლის განახლება",
+    "joined": "რეგისტრაციის თარიღი",
+    "lastActive": "ბოლო აქტივობა",
+    "tickets": "ბილეთები",
+    "savedMovies": "შენახული ფილმი",
+    "purchasedMovies": "ნაყიდი ფილმი",
+    "noFavoritesTitle": "რჩეულ ფილმები ჯერ არ გაქვთ",
+    "noFavoritesText": "კატალოგში გულის ღილაკის გამოყენებით შეინახეთ ფილმები აქ.",
+    "browseMovies": "ფილმების დათვალიერება",
+    "remove": "წაშლა",
+    "open": "გახსნა"
+  },
+  "footer": {
+    "product": "პროდუქტი",
+    "platformTitle": "სტრიმინგ პლატფორმა",
+    "platformDescription": "უყურე საყვარე ფილმებს.",
+    "dashboardTitle": "სტრიმინგ დაფა",
+    "dashboardDescription": "მართეთ კატალოგი, ფასები და მომხმარებლები ერთ ადმინისტრაციულ სივრცეში.",
+    "quickLinks": "სწრაფი ბმულები",
+    "language": "ენა",
+    "languageHint": "ენის არჩევანი ამ მოწყობილობაზე ინახება.",
+    "rights": "ყველა უფლება დაცულია.",
+    "builtWith": "შექმნილია Angular, NestJS და Nx-ით.",
+    "signedInAs": "შესულია როგორც"
+  }
+}
