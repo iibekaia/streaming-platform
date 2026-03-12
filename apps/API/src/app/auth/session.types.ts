@@ -5,6 +5,7 @@ export interface SessionRequest extends Request {
   currentUser?: Omit<User, 'password'>;
   sessionToken?: string;
   refreshToken?: string;
+  csrfToken?: string;
 }
 
 export interface AccessTokenPayload {

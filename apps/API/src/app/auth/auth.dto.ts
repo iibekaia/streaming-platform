@@ -1,4 +1,6 @@
-import { IsEmail, IsIn, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsIn, IsOptional, IsString, Matches, MinLength } from 'class-validator';
+
+const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
 export class LoginDto {
   @IsEmail()
@@ -23,6 +25,9 @@ export class RegisterDto {
 
   @IsString()
   @MinLength(8)
+  @Matches(strongPasswordPattern, {
+    message: 'Password must include upper, lower, number, and special character.',
+  })
   password!: string;
 }
 
@@ -33,5 +38,8 @@ export class ChangePasswordDto {
 
   @IsString()
   @MinLength(8)
+  @Matches(strongPasswordPattern, {
+    message: 'New password must include upper, lower, number, and special character.',
+  })
   nextPassword!: string;
 }

@@ -12,6 +12,13 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(cookieParser());
+  app.use((_, response, next) => {
+    response.setHeader('X-Frame-Options', 'DENY');
+    response.setHeader('X-Content-Type-Options', 'nosniff');
+    response.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    response.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    next();
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

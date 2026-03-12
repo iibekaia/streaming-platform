@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards
 import { Response } from 'express';
 import { AuthTokenResponse } from '@streaming-platform/data-models';
 import { BackendStore } from '../backend.store';
+import { CsrfGuard } from './csrf.guard';
 import { ChangePasswordDto, LoginDto, RegisterDto } from './auth.dto';
 import { RefreshGuard } from './refresh.guard';
 import { SessionGuard } from './session.guard';
@@ -15,13 +16,24 @@ export class AuthController {
     private readonly tokens: TokenService,
   ) {}
 
-  private setAuthCookies(response: Response, accessToken: string, refreshToken: string): void {
-    const cookieOptions = {
+  private get cookieOptions() {
+    return {
       httpOnly: true,
       sameSite: 'lax' as const,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       path: '/',
     };
+  }
+
+  private setAuthCookies(response: Response, accessToken: string, refreshToken: string): void {
+    const cookieOptions = this.cookieOptions;
+    response.cookie('sp_csrf', crypto.randomUUID(), {
+      httpOnly: false,
+      sameSite: 'strict',
+      secure: cookieOptions.secure,
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     response.cookie('sp_access', accessToken, { ...cookieOptions, maxAge: 15 * 60 * 1000 });
     response.cookie('sp_refresh', refreshToken, { ...cookieOptions, maxAge: 7 * 24 * 60 * 60 * 1000 });
   }
@@ -62,10 +74,7 @@ export class AuthController {
       this.setAuthCookies(response, accessToken, refreshToken);
     } else {
       response.cookie('sp_access', accessToken, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: false,
-        path: '/',
+        ...this.cookieOptions,
         maxAge: 15 * 60 * 1000,
       });
     }
@@ -73,7 +82,7 @@ export class AuthController {
   }
 
   @Post('refresh')
-  @UseGuards(RefreshGuard)
+  @UseGuards(CsrfGuard, RefreshGuard)
   refresh(@Req() request: SessionRequest, @Res({ passthrough: true }) response: Response) {
     const session = this.store.validateSession(request.sessionToken!);
     if (!session) {
@@ -91,16 +100,17 @@ export class AuthController {
   }
 
   @Post('logout')
-  @UseGuards(SessionGuard)
+  @UseGuards(CsrfGuard, SessionGuard)
   logout(@Req() request: SessionRequest, @Res({ passthrough: true }) response: Response) {
     this.store.logout(request.sessionToken!);
     response.clearCookie('sp_access', { path: '/' });
     response.clearCookie('sp_refresh', { path: '/' });
+    response.clearCookie('sp_csrf', { path: '/' });
     return { ok: true };
   }
 
   @Post('change-password')
-  @UseGuards(SessionGuard)
+  @UseGuards(CsrfGuard, SessionGuard)
   changePassword(@Req() request: SessionRequest, @Body() dto: ChangePasswordDto) {
     this.store.changePassword(request.sessionToken!, dto.currentPassword, dto.nextPassword);
     return { ok: true };

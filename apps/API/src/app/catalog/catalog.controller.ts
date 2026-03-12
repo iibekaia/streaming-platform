@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } fro
 import { BackendStore } from '../backend.store';
 import { MoviesQueryDto, PaginationQueryDto, SaveCategoryDto, SaveMovieDto } from './catalog.dto';
 import { AdminGuard } from '../auth/admin.guard';
+import { CsrfGuard } from '../auth/csrf.guard';
 import { SessionGuard } from '../auth/session.guard';
 import { OmdbService } from './omdb.service';
 
@@ -27,19 +28,19 @@ export class CatalogController {
     return this.store.getCategories(query.page, query.pageSize);
   }
 
-  @UseGuards(SessionGuard, AdminGuard)
+  @UseGuards(CsrfGuard, SessionGuard, AdminGuard)
   @Post('admin/movies')
   createMovie(@Body() dto: SaveMovieDto) {
     return this.store.upsertMovie(dto);
   }
 
-  @UseGuards(SessionGuard, AdminGuard)
+  @UseGuards(CsrfGuard, SessionGuard, AdminGuard)
   @Put('admin/movies/:id')
   updateMovie(@Param('id') id: string, @Body() dto: SaveMovieDto) {
     return this.store.upsertMovie({ ...dto, id });
   }
 
-  @UseGuards(SessionGuard, AdminGuard)
+  @UseGuards(CsrfGuard, SessionGuard, AdminGuard)
   @Delete('admin/movies/:id')
   deleteMovie(@Param('id') id: string) {
     this.store.deleteMovie(id);
@@ -52,19 +53,19 @@ export class CatalogController {
     return this.omdbService.importMovie(imdbId);
   }
 
-  @UseGuards(SessionGuard, AdminGuard)
+  @UseGuards(CsrfGuard, SessionGuard, AdminGuard)
   @Post('admin/categories')
   createCategory(@Body() dto: SaveCategoryDto) {
     return this.store.upsertCategory(dto);
   }
 
-  @UseGuards(SessionGuard, AdminGuard)
+  @UseGuards(CsrfGuard, SessionGuard, AdminGuard)
   @Put('admin/categories/:id')
   updateCategory(@Param('id') id: string, @Body() dto: SaveCategoryDto) {
     return this.store.upsertCategory({ ...dto, id });
   }
 
-  @UseGuards(SessionGuard, AdminGuard)
+  @UseGuards(CsrfGuard, SessionGuard, AdminGuard)
   @Delete('admin/categories/:id')
   deleteCategory(@Param('id') id: string) {
     return this.store.deleteCategory(id);

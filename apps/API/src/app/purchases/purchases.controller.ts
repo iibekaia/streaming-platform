@@ -1,11 +1,12 @@
 import { Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { BackendStore } from '../backend.store';
 import { CurrentUser } from '../auth/current-user.decorator';
+import { CsrfGuard } from '../auth/csrf.guard';
 import { SessionGuard } from '../auth/session.guard';
 import { User } from '@streaming-platform/data-models';
 
 @Controller('purchases')
-@UseGuards(SessionGuard)
+@UseGuards(CsrfGuard, SessionGuard)
 export class PurchasesController {
   constructor(private readonly store: BackendStore) {}
 

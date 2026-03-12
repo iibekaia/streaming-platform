@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   ActivityItem,
   AnalyticsSummary,
@@ -105,16 +105,67 @@ const buildSeedMovie = (movie: SeedMovie): Movie => ({
 
 @Injectable()
 export class BackendStore {
-  private readonly refreshSessions = new Map<string, { userId: string; refreshId: string }>();
+  private readonly refreshSessions = new Map<
+    string,
+    { userId: string; refreshId: string }
+  >();
   private categories: Category[] = [
-    { id: 'cat-action', name: 'Action', slug: 'action', color: '#ef4444', description: 'Fast and high-impact stories' },
-    { id: 'cat-adventure', name: 'Adventure', slug: 'adventure', color: '#f59e0b', description: 'Expansive journeys and quests' },
-    { id: 'cat-animation', name: 'Animation', slug: 'animation', color: '#06b6d4', description: 'Animated features for all ages' },
-    { id: 'cat-crime', name: 'Crime', slug: 'crime', color: '#334155', description: 'Underworld sagas and investigations' },
-    { id: 'cat-drama', name: 'Drama', slug: 'drama', color: '#7c3aed', description: 'Character-driven films' },
-    { id: 'cat-fantasy', name: 'Fantasy', slug: 'fantasy', color: '#8b5cf6', description: 'Epic worlds and mythic stakes' },
-    { id: 'cat-sci-fi', name: 'Sci-Fi', slug: 'sci-fi', color: '#4f46e5', description: 'World-bending stories' },
-    { id: 'cat-thriller', name: 'Thriller', slug: 'thriller', color: '#0f172a', description: 'High-tension picks' },
+    {
+      id: 'cat-action',
+      name: 'Action',
+      slug: 'action',
+      color: '#ef4444',
+      description: 'Fast and high-impact stories',
+    },
+    {
+      id: 'cat-adventure',
+      name: 'Adventure',
+      slug: 'adventure',
+      color: '#f59e0b',
+      description: 'Expansive journeys and quests',
+    },
+    {
+      id: 'cat-animation',
+      name: 'Animation',
+      slug: 'animation',
+      color: '#06b6d4',
+      description: 'Animated features for all ages',
+    },
+    {
+      id: 'cat-crime',
+      name: 'Crime',
+      slug: 'crime',
+      color: '#334155',
+      description: 'Underworld sagas and investigations',
+    },
+    {
+      id: 'cat-drama',
+      name: 'Drama',
+      slug: 'drama',
+      color: '#7c3aed',
+      description: 'Character-driven films',
+    },
+    {
+      id: 'cat-fantasy',
+      name: 'Fantasy',
+      slug: 'fantasy',
+      color: '#8b5cf6',
+      description: 'Epic worlds and mythic stakes',
+    },
+    {
+      id: 'cat-sci-fi',
+      name: 'Sci-Fi',
+      slug: 'sci-fi',
+      color: '#4f46e5',
+      description: 'World-bending stories',
+    },
+    {
+      id: 'cat-thriller',
+      name: 'Thriller',
+      slug: 'thriller',
+      color: '#0f172a',
+      description: 'High-tension picks',
+    },
   ];
 
   private movies: Movie[] = movieSeeds.map(buildSeedMovie);
@@ -148,12 +199,43 @@ export class BackendStore {
     },
   ];
 
-  private tickets: Ticket[] = [{ id: 'ticket-1', userId: 'user-ava', movieId: 'movie-the-dark-knight', purchasedAt: iso(-10) }];
-  private plans: Plan[] = [{ id: 'plan-ava', userId: 'user-ava', type: 'unlimited', startedAt: iso(-10), expiresAt: iso(20), status: 'active' }];
-  private planConfig: PlanConfig = { unlimitedMonthlyPrice: 19, defaultTicketPrice: 8 };
+  private tickets: Ticket[] = [
+    {
+      id: 'ticket-1',
+      userId: 'user-ava',
+      movieId: 'movie-the-dark-knight',
+      purchasedAt: iso(-10),
+    },
+  ];
+  private plans: Plan[] = [
+    {
+      id: 'plan-ava',
+      userId: 'user-ava',
+      type: 'unlimited',
+      startedAt: iso(-10),
+      expiresAt: iso(20),
+      status: 'active',
+    },
+  ];
+  private planConfig: PlanConfig = {
+    unlimitedMonthlyPrice: 19,
+    defaultTicketPrice: 8,
+  };
   private activity: ActivityItem[] = [
-    { id: 'act-1', type: 'purchase', title: 'UNLIMITED purchased', meta: 'Ava Bennett', createdAt: iso(-2) },
-    { id: 'act-2', type: 'login', title: 'Admin sign-in', meta: 'Jules Mercer', createdAt: iso(-1) },
+    {
+      id: 'act-1',
+      type: 'purchase',
+      title: 'UNLIMITED purchased',
+      meta: 'Ava Bennett',
+      createdAt: iso(-2),
+    },
+    {
+      id: 'act-2',
+      type: 'login',
+      title: 'Admin sign-in',
+      meta: 'Jules Mercer',
+      createdAt: iso(-1),
+    },
   ];
 
   getSanitizedUser(user: User): Omit<User, 'password'> {
@@ -161,7 +243,11 @@ export class BackendStore {
     return safeUser;
   }
 
-  authenticate(email: string, password: string, role?: User['role']): AuthSession | null {
+  authenticate(
+    email: string,
+    password: string,
+    role?: User['role'],
+  ): AuthSession | null {
     const user = this.users.find(
       (item) =>
         item.email.toLowerCase() === email.toLowerCase() &&
@@ -189,6 +275,10 @@ export class BackendStore {
   }
 
   register(displayName: string, email: string, password: string): AuthSession {
+    if (this.users.some((user) => user.email.toLowerCase() === email.toLowerCase())) {
+      throw new ConflictException('An account with this email already exists.');
+    }
+
     const user: User = {
       id: createId('user'),
       email,
@@ -211,7 +301,10 @@ export class BackendStore {
     return user ? this.createSession(user) : null;
   }
 
-  validateRefreshSession(sessionToken: string, refreshId: string): AuthSession | null {
+  validateRefreshSession(
+    sessionToken: string,
+    refreshId: string,
+  ): AuthSession | null {
     const refreshSession = this.refreshSessions.get(sessionToken);
     if (!refreshSession || refreshSession.refreshId !== refreshId) {
       return null;
@@ -247,17 +340,30 @@ export class BackendStore {
     this.refreshSessions.delete(sessionToken);
   }
 
-  changePassword(sessionToken: string, currentPassword: string, nextPassword: string): void {
+  changePassword(
+    sessionToken: string,
+    currentPassword: string,
+    nextPassword: string,
+  ): void {
     const user = this.users.find((item) => item.sessionToken === sessionToken);
     if (!user || user.password !== currentPassword) {
       throw new UnauthorizedException('Current password is incorrect.');
+    }
+    if (currentPassword === nextPassword) {
+      throw new BadRequestException('New password must be different from the current password.');
     }
 
     user.password = nextPassword;
     user.lastActive = new Date().toISOString();
   }
 
-  getMovies(search?: string, categoryIds?: string[], includeDrafts = false, page = 1, pageSize = 12): PaginatedResponse<Movie> {
+  getMovies(
+    search?: string,
+    categoryIds?: string[],
+    includeDrafts = false,
+    page = 1,
+    pageSize = 12,
+  ): PaginatedResponse<Movie> {
     const filtered = this.movies.filter((movie) => {
       if (!includeDrafts && movie.status !== 'published') {
         return false;
@@ -265,7 +371,10 @@ export class BackendStore {
       if (search && !movie.title.toLowerCase().includes(search.toLowerCase())) {
         return false;
       }
-      if (categoryIds?.length && !categoryIds.every((id) => movie.categories.includes(id))) {
+      if (
+        categoryIds?.length &&
+        !categoryIds.every((id) => movie.categories.includes(id))
+      ) {
         return false;
       }
       return true;
@@ -278,17 +387,27 @@ export class BackendStore {
     return this.movies.find((movie) => movie.id === id);
   }
 
-  getCategories(page = 1, pageSize = 50): PaginatedResponse<Category & { movieCount: number }> {
+  getCategories(
+    page = 1,
+    pageSize = 50,
+  ): PaginatedResponse<Category & { movieCount: number }> {
     const items = this.categories.map((category) => ({
       ...category,
-      movieCount: this.movies.filter((movie) => movie.categories.includes(category.id)).length,
+      movieCount: this.movies.filter((movie) =>
+        movie.categories.includes(category.id),
+      ).length,
     }));
 
     return this.paginate(items, page, pageSize);
   }
 
   buyTicket(userId: string, movieId: string): PurchaseResult {
-    const ticket: Ticket = { id: createId('ticket'), userId, movieId, purchasedAt: new Date().toISOString() };
+    const ticket: Ticket = {
+      id: createId('ticket'),
+      userId,
+      movieId,
+      purchasedAt: new Date().toISOString(),
+    };
     this.tickets.unshift(ticket);
     const movie = this.movies.find((item) => item.id === movieId);
     const user = this.users.find((item) => item.id === userId);
@@ -314,11 +433,18 @@ export class BackendStore {
       status: 'active',
     };
     this.plans = [plan, ...this.plans.filter((item) => item.userId !== userId)];
-    this.users = this.users.map((user) => (user.id === userId ? { ...user, plan: 'unlimited', planExpiresAt: plan.expiresAt } : user));
+    this.users = this.users.map((user) =>
+      user.id === userId
+        ? { ...user, plan: 'unlimited', planExpiresAt: plan.expiresAt }
+        : user,
+    );
     return this.entitlements(userId);
   }
 
-  listUsers(page = 1, pageSize = 10): PaginatedResponse<Omit<User, 'password'>> {
+  listUsers(
+    page = 1,
+    pageSize = 10,
+  ): PaginatedResponse<Omit<User, 'password'>> {
     const users = this.users.map((user) => this.getSanitizedUser(user));
     return this.paginate(users, page, pageSize);
   }
@@ -328,12 +454,16 @@ export class BackendStore {
     if (user?.sessionToken) {
       this.refreshSessions.delete(user.sessionToken);
     }
-    this.users = this.users.map((item) => (item.id === userId ? { ...item, sessionToken: null } : item));
+    this.users = this.users.map((item) =>
+      item.id === userId ? { ...item, sessionToken: null } : item,
+    );
   }
 
   toggleUserStatus(userId: string): void {
     this.users = this.users.map((user) =>
-      user.id === userId ? { ...user, status: user.status === 'active' ? 'suspended' : 'active' } : user,
+      user.id === userId
+        ? { ...user, status: user.status === 'active' ? 'suspended' : 'active' }
+        : user,
     );
   }
 
@@ -369,7 +499,11 @@ export class BackendStore {
       featured: movie.featured ?? false,
     };
     const existing = this.movies.find((item) => item.id === nextMovie.id);
-    this.movies = existing ? this.movies.map((item) => (item.id === nextMovie.id ? { ...existing, ...nextMovie } : item)) : [nextMovie, ...this.movies];
+    this.movies = existing
+      ? this.movies.map((item) =>
+          item.id === nextMovie.id ? { ...existing, ...nextMovie } : item,
+        )
+      : [nextMovie, ...this.movies];
     return nextMovie;
   }
 
@@ -378,7 +512,9 @@ export class BackendStore {
     this.tickets = this.tickets.filter((ticket) => ticket.movieId !== movieId);
   }
 
-  upsertCategory(category: Partial<Category> & Pick<Category, 'name'>): Category {
+  upsertCategory(
+    category: Partial<Category> & Pick<Category, 'name'>,
+  ): Category {
     const nextCategory: Category = {
       id: category.id ?? createId('category'),
       name: category.name,
@@ -388,32 +524,45 @@ export class BackendStore {
       icon: category.icon,
       deletedAt: null,
     };
-    const existing = this.categories.find((item) => item.id === nextCategory.id);
+    const existing = this.categories.find(
+      (item) => item.id === nextCategory.id,
+    );
     this.categories = existing
-      ? this.categories.map((item) => (item.id === nextCategory.id ? { ...existing, ...nextCategory } : item))
+      ? this.categories.map((item) =>
+          item.id === nextCategory.id ? { ...existing, ...nextCategory } : item,
+        )
       : [nextCategory, ...this.categories];
     return nextCategory;
   }
 
   deleteCategory(categoryId: string): { softDeleted: boolean } {
-    const linked = this.movies.some((movie) => movie.categories.includes(categoryId));
+    const linked = this.movies.some((movie) =>
+      movie.categories.includes(categoryId),
+    );
     if (linked) {
       this.categories = this.categories.map((category) =>
-        category.id === categoryId ? { ...category, deletedAt: new Date().toISOString() } : category,
+        category.id === categoryId
+          ? { ...category, deletedAt: new Date().toISOString() }
+          : category,
       );
       return { softDeleted: true };
     }
-    this.categories = this.categories.filter((category) => category.id !== categoryId);
+    this.categories = this.categories.filter(
+      (category) => category.id !== categoryId,
+    );
     return { softDeleted: false };
   }
 
   analytics(): AnalyticsSummary {
-    const activeSubscriptions = this.plans.filter((plan) => plan.status === 'active').length;
+    const activeSubscriptions = this.plans.filter(
+      (plan) => plan.status === 'active',
+    ).length;
     const totalRevenue =
       this.tickets.reduce((sum, ticket) => {
         const movie = this.movies.find((item) => item.id === ticket.movieId);
         return sum + (movie?.ticketPrice ?? this.planConfig.defaultTicketPrice);
-      }, 0) + activeSubscriptions * this.planConfig.unlimitedMonthlyPrice;
+      }, 0) +
+      activeSubscriptions * this.planConfig.unlimitedMonthlyPrice;
 
     return {
       totalUsers: this.users.filter((user) => user.role === 'user').length,
@@ -457,7 +606,10 @@ export class BackendStore {
   private entitlements(userId: string): PurchaseResult {
     return {
       tickets: this.tickets.filter((ticket) => ticket.userId === userId),
-      activePlan: this.plans.find((plan) => plan.userId === userId && plan.status === 'active') ?? null,
+      activePlan:
+        this.plans.find(
+          (plan) => plan.userId === userId && plan.status === 'active',
+        ) ?? null,
     };
   }
 
@@ -465,7 +617,10 @@ export class BackendStore {
     return {
       user: this.getSanitizedUser(user),
       tickets: this.tickets.filter((ticket) => ticket.userId === user.id),
-      activePlan: this.plans.find((plan) => plan.userId === user.id && plan.status === 'active') ?? null,
+      activePlan:
+        this.plans.find(
+          (plan) => plan.userId === user.id && plan.status === 'active',
+        ) ?? null,
       session: {
         sessionToken: user.sessionToken!,
         lastValidatedAt: new Date().toISOString(),
@@ -473,7 +628,11 @@ export class BackendStore {
     };
   }
 
-  private paginate<T>(items: T[], page = 1, pageSize = 12): PaginatedResponse<T> {
+  private paginate<T>(
+    items: T[],
+    page = 1,
+    pageSize = 12,
+  ): PaginatedResponse<T> {
     const safePage = Math.max(1, page);
     const safePageSize = Math.max(1, pageSize);
     const total = items.length;
