@@ -1,0 +1,52 @@
+# Build output
+/dist
+/tmp
+/out-tsc
+/coverage
+
+# Dependencies
+/node_modules
+
+# Nx and Angular cache
+/.nx/cache
+/.nx/workspace-data
+/.angular
+
+# Environment files
+.env
+.env.*
+!.env.example
+apps/API/.env
+apps/API/.env.*
+!apps/API/.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+testem.log
+/libpeerconnection.log
+
+# IDEs and editors
+/.idea
+/.vscode/*
+!/.vscode/settings.json
+!/.vscode/tasks.json
+!/.vscode/launch.json
+!/.vscode/extensions.json
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Misc
+/.sass-cache
+/connect.lock
+/typings
+
+# System files
+.DS_Store
+Thumbs.db

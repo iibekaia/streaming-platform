@@ -1,0 +1,40 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { AuthTokenResponse, PurchaseResult } from '@streaming-platform/data-models';
+import { Observable, map } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class AuthApiService {
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = 'http://localhost:3000/api';
+
+  login(email: string, password: string, role?: 'user' | 'admin'): Observable<AuthTokenResponse> {
+    return this.http.post<AuthTokenResponse>(`${this.baseUrl}/auth/login`, { email, password, role }, { withCredentials: true });
+  }
+
+  register(displayName: string, email: string, password: string): Observable<AuthTokenResponse> {
+    return this.http.post<AuthTokenResponse>(`${this.baseUrl}/auth/register`, { displayName, email, password }, { withCredentials: true });
+  }
+
+  validateSession(): Observable<AuthTokenResponse> {
+    return this.http.get<AuthTokenResponse>(`${this.baseUrl}/auth/validate-session`, { withCredentials: true });
+  }
+
+  refresh(): Observable<string> {
+    return this.http
+      .post<{ accessToken: string }>(`${this.baseUrl}/auth/refresh`, {}, { withCredentials: true })
+      .pipe(map((response) => response.accessToken));
+  }
+
+  logout(): Observable<void> {
+    return this.http.post<{ ok: true }>(`${this.baseUrl}/auth/logout`, {}, { withCredentials: true }).pipe(map(() => void 0));
+  }
+
+  buyTicket(_: string, movieId: string): Observable<PurchaseResult> {
+    return this.http.post<PurchaseResult>(`${this.baseUrl}/purchases/tickets/${movieId}`, {}, { withCredentials: true });
+  }
+
+  buyUnlimited(_: string): Observable<PurchaseResult> {
+    return this.http.post<PurchaseResult>(`${this.baseUrl}/purchases/unlimited`, {}, { withCredentials: true });
+  }
+}

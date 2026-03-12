@@ -1,0 +1,18 @@
+<section class="rounded-[2rem] bg-white p-6 shadow-sm">
+  <h1 class="text-2xl font-semibold text-slate-950">Users</h1>
+  <div class="mt-6 space-y-4">
+    @for (user of users(); track user.id) {
+      <div class="grid gap-4 rounded-[1.5rem] border border-slate-200 p-4 md:grid-cols-[1fr_auto] md:items-center">
+        <div>
+          <p class="font-semibold text-slate-900">{{ user.displayName }}</p>
+          <p class="text-sm text-slate-500">{{ user.email }} • {{ user.plan }}</p>
+          <p class="mt-1 text-xs uppercase tracking-[0.2em]" [class.text-emerald-600]="user.status === 'active'" [class.text-red-600]="user.status === 'suspended'">{{ user.status }}</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm" (click)="revoke(user.id)">Revoke session</button>
+          <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm" (click)="toggle(user.id)">Toggle status</button>
+        </div>
+      </div>
+    }
+  </div>
+</section>

@@ -1,0 +1,30 @@
+<section class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+  <article class="rounded-[2rem] bg-white p-6 shadow-sm">
+    <h1 class="text-2xl font-semibold text-slate-950">Categories</h1>
+    <div class="mt-6 space-y-4">
+      @for (category of categories(); track category.id) {
+        <div class="flex items-center justify-between rounded-[1.5rem] border border-slate-200 px-4 py-4">
+          <div>
+            <p class="font-semibold text-slate-900">{{ category.name }}</p>
+            <p class="text-sm text-slate-500">{{ category.slug }} • {{ category.movieCount }} movies</p>
+          </div>
+          <div class="flex gap-2">
+            <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm" (click)="edit(category)">Edit</button>
+            <button class="rounded-xl border border-red-200 px-3 py-2 text-sm text-red-700" (click)="remove(category.id)">Delete</button>
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="rounded-[2rem] bg-white p-6 shadow-sm">
+    <h2 class="text-xl font-semibold text-slate-950">{{ selectedId() ? 'Edit category' : 'Create category' }}</h2>
+    <div class="mt-6 space-y-4">
+      <input formControlName="name" placeholder="Name" class="w-full rounded-2xl border border-slate-200 px-4 py-3" />
+      <input [value]="slugify(form.controls.name.value)" readonly class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-500" />
+      <textarea formControlName="description" rows="4" placeholder="Description" class="w-full rounded-2xl border border-slate-200 px-4 py-3"></textarea>
+      <input formControlName="color" placeholder="Color hex" class="w-full rounded-2xl border border-slate-200 px-4 py-3" />
+      <button class="rounded-2xl bg-slate-950 px-4 py-3 text-white">Save category</button>
+    </div>
+  </form>
+</section>

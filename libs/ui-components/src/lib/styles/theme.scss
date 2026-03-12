@@ -1,0 +1,32 @@
+:root {
+  --font-sans: 'Inter', 'Segoe UI', sans-serif;
+  --color-primary: #4f46e5;
+  --color-primary-soft: #eef2ff;
+  --color-accent: #8b5cf6;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8fafc;
+  --color-card: #f1f5f9;
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-border: #e2e8f0;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(79, 70, 229, 0.08), transparent 32%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+* {
+  box-sizing: border-box;
+}

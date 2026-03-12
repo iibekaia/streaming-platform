@@ -1,0 +1,22 @@
+<section class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+  <form [formGroup]="form" (ngSubmit)="save()" class="rounded-[2rem] bg-white p-6 shadow-sm">
+    <h1 class="text-2xl font-semibold text-slate-950">Plans config</h1>
+    <div class="mt-6 space-y-4">
+      <label class="block">
+        <span class="mb-2 block text-sm text-slate-600">UNLIMITED monthly price</span>
+        <input formControlName="unlimitedMonthlyPrice" class="w-full rounded-2xl border border-slate-200 px-4 py-3" />
+      </label>
+      <label class="block">
+        <span class="mb-2 block text-sm text-slate-600">Default ticket price</span>
+        <input formControlName="defaultTicketPrice" class="w-full rounded-2xl border border-slate-200 px-4 py-3" />
+      </label>
+      <button class="rounded-2xl bg-slate-950 px-4 py-3 text-white">Save pricing</button>
+    </div>
+  </form>
+
+  <article class="rounded-[2rem] border border-dashed border-slate-300 bg-slate-50 p-6">
+    <div class="inline-flex rounded-full bg-violet-100 px-3 py-1 text-xs font-medium text-violet-700">Coming soon</div>
+    <h2 class="mt-4 text-2xl font-semibold text-slate-950">Coupon codes</h2>
+    <p class="mt-3 text-slate-600">Stubbed UI for future promotional pricing, renewal discounts, and campaign tracking.</p>
+  </article>
+</section>

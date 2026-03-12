@@ -1,0 +1,42 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@streaming-platform/api-services": [
+        "libs/api-services/src/index.ts"
+      ],
+      "@streaming-platform/utils": [
+        "libs/utils/src/index.ts"
+      ],
+      "@streaming-platform/data-models": [
+        "libs/data-models/src/index.ts"
+      ],
+      "@streaming-platform/auth-lib": [
+        "libs/auth-lib/src/index.ts"
+      ],
+      "@streaming-platform/ui-components": [
+        "libs/ui-components/src/index.ts"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
+}

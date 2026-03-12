@@ -1,0 +1,44 @@
+<section class="mx-auto flex min-h-screen max-w-6xl items-center px-6 py-12">
+  <div class="grid w-full gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="rounded-[2rem] bg-slate-950 p-10 text-white shadow-2xl">
+      <p class="mb-4 text-sm uppercase tracking-[0.3em] text-indigo-300">Streaming Platform</p>
+      <h1 class="max-w-lg text-4xl font-semibold leading-tight">Buy a ticket or go UNLIMITED. Watch without friction.</h1>
+      <p class="mt-4 max-w-lg text-slate-300">Single-device session protection, entitlement-aware playback, and a dashboard-ready content catalog.</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl">
+      <h2 class="text-2xl font-semibold text-slate-900">Sign in</h2>
+      <p class="mt-2 text-sm text-slate-500">Use <code>ava@example.com / Password123!</code> or <code>admin@example.com / Admin123!</code>.</p>
+
+      <div class="mt-8 space-y-5">
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-700">Email</span>
+          <input formControlName="email" class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+        </label>
+
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-700">Password</span>
+          <input type="password" formControlName="password" class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500" />
+        </label>
+      </div>
+
+      @if (error()) {
+        <p class="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">{{ error() }}</p>
+      }
+
+      <button
+        type="submit"
+        class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-4 py-3 font-medium text-white transition hover:bg-indigo-500 disabled:opacity-60"
+        [disabled]="form.invalid || loading()"
+      >
+        @if (loading()) { <ui-spinner /> }
+        Continue
+      </button>
+
+      <p class="mt-6 text-sm text-slate-500">
+        New here?
+        <a routerLink="/register" class="font-medium text-indigo-600">Create an account</a>
+      </p>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,73 @@
+@if (loading()) {
+  <div class="flex justify-center rounded-[2rem] border border-slate-200 bg-white px-6 py-16"><ui-spinner /></div>
+} @else if (!movie()) {
+  <div class="rounded-[2rem] border border-slate-200 bg-white px-6 py-16 text-center">
+    <h1 class="text-2xl font-semibold text-slate-900">Movie not found</h1>
+    <a routerLink="/movies" class="mt-4 inline-block text-indigo-600">Back to movies</a>
+  </div>
+} @else {
+  <section class="grid gap-8 xl:grid-cols-[420px_1fr]">
+    <img [src]="movie()!.posterUrl" [alt]="movie()!.title" class="w-full rounded-[2rem] object-cover shadow-xl" />
+    <div class="space-y-6 rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-3">
+        @for (name of categoryNames(); track name) {
+          <span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700">{{ name }}</span>
+        }
+        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">{{ movie()!.rating }}/10</span>
+      </div>
+      <div class="flex items-start justify-between gap-6">
+        <div>
+          <h1 class="text-4xl font-semibold text-slate-950">{{ movie()!.title }}</h1>
+          <p class="mt-3 max-w-3xl text-slate-600">{{ movie()!.description }}</p>
+        </div>
+        <button
+          type="button"
+          class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-rose-200 hover:text-rose-600"
+          [class.border-rose-200]="auth.isFavorite(movie()!.id)"
+          [class.bg-rose-50]="auth.isFavorite(movie()!.id)"
+          [class.text-rose-600]="auth.isFavorite(movie()!.id)"
+          [attr.aria-label]="auth.isFavorite(movie()!.id) ? 'Remove from favorites' : 'Add to favorites'"
+          (click)="toggleFavorite(movie()!.id)"
+        >
+          <svg siHeartIcon class="h-6 w-6"></svg>
+        </button>
+      </div>
+      <div class="grid gap-4 text-sm text-slate-600 md:grid-cols-2">
+        <p><span class="font-medium text-slate-900">Director:</span> {{ movie()!.director }}</p>
+        <p><span class="font-medium text-slate-900">Cast:</span> {{ movie()!.cast.join(', ') }}</p>
+        <p><span class="font-medium text-slate-900">Runtime:</span> {{ formatRuntime(movie()!.duration) }}</p>
+        <p><span class="font-medium text-slate-900">Year:</span> {{ movie()!.year }}</p>
+      </div>
+
+      @if (canWatch()) {
+        <div class="rounded-[2rem] border border-emerald-200 bg-emerald-50 p-6">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-emerald-900">Watch now</h2>
+              <p class="text-sm text-emerald-700">Your entitlements already cover this title.</p>
+            </div>
+            <button class="rounded-2xl bg-emerald-600 px-5 py-3 font-medium text-white" (click)="playing.set(true)">Play</button>
+          </div>
+        </div>
+      } @else {
+        <div class="grid gap-4 rounded-[2rem] border border-slate-200 bg-slate-50 p-6 md:grid-cols-2">
+          <div class="rounded-[1.5rem] bg-white p-5 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Per-movie access</p>
+            <h3 class="mt-2 text-2xl font-semibold text-slate-950">{{ formatPrice(movie()!.ticketPrice) }}</h3>
+            <button class="mt-4 rounded-2xl bg-indigo-600 px-4 py-3 font-medium text-white" (click)="buyTicket()">Buy ticket</button>
+          </div>
+          <div class="rounded-[1.5rem] bg-violet-600 p-5 text-white shadow-sm">
+            <p class="text-sm font-medium text-violet-100">Recommended</p>
+            <h3 class="mt-2 text-2xl font-semibold">UNLIMITED</h3>
+            <p class="mt-2 text-sm text-violet-100">Monthly access to the full catalog.</p>
+            <button class="mt-4 rounded-2xl bg-white px-4 py-3 font-medium text-violet-700" (click)="buyUnlimited()">Get UNLIMITED</button>
+          </div>
+        </div>
+      }
+
+      @if (playing()) {
+        <video controls class="w-full rounded-[1.5rem] bg-slate-950" [src]="movie()!.videoUrl"></video>
+      }
+    </div>
+  </section>
+}

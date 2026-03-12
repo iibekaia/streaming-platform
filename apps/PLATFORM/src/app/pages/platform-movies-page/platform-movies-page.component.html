@@ -1,0 +1,73 @@
+<section class="space-y-8">
+  <div class="rounded-[2rem] bg-gradient-to-r from-slate-950 via-indigo-900 to-violet-700 p-8 text-white">
+    <p class="text-sm uppercase tracking-[0.3em] text-indigo-200">Catalog</p>
+    <h1 class="mt-3 text-4xl font-semibold">Browse, filter, and watch on your terms.</h1>
+  </div>
+
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <ui-search-bar [value]="search()" (valueChange)="onSearch($event)" />
+    <div class="flex flex-wrap gap-3">
+      @for (category of categories(); track category.id) {
+        <button
+          type="button"
+          class="rounded-full border px-4 py-2 text-sm transition"
+          [class.border-indigo-600]="selectedCategories().includes(category.id)"
+          [class.bg-indigo-50]="selectedCategories().includes(category.id)"
+          [class.text-indigo-700]="selectedCategories().includes(category.id)"
+          [class.border-slate-200]="!selectedCategories().includes(category.id)"
+          [class.text-slate-600]="!selectedCategories().includes(category.id)"
+          (click)="toggleCategory(category.id)"
+        >
+          {{ category.name }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center rounded-[2rem] border border-slate-200 bg-white px-6 py-12">
+      <ui-spinner />
+    </div>
+  } @else if (!movies().length) {
+    <div class="rounded-[2rem] border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
+      <h2 class="text-xl font-semibold text-slate-900">No movies match those filters</h2>
+      <p class="mt-2 text-sm text-slate-500">Try a broader search or clear one of the selected categories.</p>
+    </div>
+  } @else {
+    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      @for (movie of movies(); track movie.id) {
+        <article class="group relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+          <a [routerLink]="['/movies', movie.id]" class="block">
+            <img [src]="movie.posterUrl" [alt]="movie.title" loading="lazy" width="400" height="560" class="aspect-[4/5] w-full object-cover" />
+          </a>
+          <button
+            type="button"
+            class="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/90 text-slate-600 shadow-sm backdrop-blur transition hover:scale-105 hover:text-rose-600"
+            [class.border-rose-200]="auth.isFavorite(movie.id)"
+            [class.bg-rose-50]="auth.isFavorite(movie.id)"
+            [class.text-rose-600]="auth.isFavorite(movie.id)"
+            [attr.aria-label]="auth.isFavorite(movie.id) ? 'Remove from favorites' : 'Add to favorites'"
+            (click)="toggleFavorite($event, movie.id)"
+          >
+            <svg siHeartIcon class="h-5 w-5"></svg>
+          </button>
+          <div class="space-y-3 p-5">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <a [routerLink]="['/movies', movie.id]" class="text-lg font-semibold text-slate-900">{{ movie.title }}</a>
+                <p class="text-sm text-slate-500">{{ movie.year }} • {{ formatRuntime(movie.duration) }}</p>
+              </div>
+              <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">{{ movie.rating }}</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              @for (category of categoryNames(movie); track category) {
+                <span class="rounded-full bg-violet-50 px-3 py-1 text-xs font-medium text-violet-700">{{ category }}</span>
+              }
+            </div>
+            <p class="text-sm text-slate-600">{{ formatPrice(movie.ticketPrice) }} ticket</p>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

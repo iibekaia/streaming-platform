@@ -1,0 +1,26 @@
+import { APP_INITIALIZER, ApplicationConfig, inject, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from '@streaming-platform/auth-lib';
+import { AuthStore } from '@streaming-platform/auth-lib';
+import { provideRouter } from '@angular/router';
+import { catchError, firstValueFrom, of } from 'rxjs';
+import { appRoutes } from './app.routes';
+
+function initializeAuth() {
+  const auth = inject(AuthStore);
+  return () => firstValueFrom(auth.validateSession().pipe(catchError(() => of(null))));
+}
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(appRoutes),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: initializeAuth,
+    },
+  ],
+};
