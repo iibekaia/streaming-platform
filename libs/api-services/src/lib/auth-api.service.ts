@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthTokenResponse, PurchaseResult } from '@streaming-platform/data-models';
+import { AuthTokenResponse, PurchaseResult, UserRole } from '@streaming-platform/data-models';
 import { Observable, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -8,12 +8,12 @@ export class AuthApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = 'http://localhost:3000/api';
 
-  login(identifier: string, password: string, role?: 'user' | 'admin'): Observable<AuthTokenResponse> {
+  login(identifier: string, password: string, role?: UserRole): Observable<AuthTokenResponse> {
     return this.http.post<AuthTokenResponse>(`${this.baseUrl}/auth/login`, { identifier, password, role }, { withCredentials: true });
   }
 
-  register(displayName: string, email: string, password: string): Observable<AuthTokenResponse> {
-    return this.http.post<AuthTokenResponse>(`${this.baseUrl}/auth/register`, { displayName, email, password }, { withCredentials: true });
+  register(username: string, displayName: string, email: string, password: string): Observable<AuthTokenResponse> {
+    return this.http.post<AuthTokenResponse>(`${this.baseUrl}/auth/register`, { username, displayName, email, password }, { withCredentials: true });
   }
 
   validateSession(): Observable<AuthTokenResponse> {

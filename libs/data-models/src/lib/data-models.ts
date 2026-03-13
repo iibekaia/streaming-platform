@@ -1,6 +1,10 @@
-export type UserRole = 'user' | 'admin';
 export type MovieStatus = 'draft' | 'published';
 export type UserStatus = 'active' | 'suspended';
+
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
 
 export enum SubscriptionPlan {
   STANDARD = 'standard',
@@ -74,6 +78,7 @@ export interface User {
   id: string;
   email: string;
   password: string;
+  username: string;
   displayName: string;
   role: UserRole;
   plan: SubscriptionPlan;

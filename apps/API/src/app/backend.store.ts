@@ -12,6 +12,7 @@ import {
   SubscriptionPlan,
   Ticket,
   User,
+  UserRole,
 } from '@streaming-platform/data-models';
 import { createId, slugify, uniqueStrings } from '@streaming-platform/utils';
 
@@ -176,8 +177,9 @@ export class BackendStore {
       id: 'user-ava',
       email: 'ava@example.com',
       password: 'Password123!',
+      username: 'imedabekaia',
       displayName: 'Imeda Bekaia',
-      role: 'user',
+      role: UserRole.USER,
       plan: SubscriptionPlan.UNLIMITED,
       planExpiresAt: iso(20),
       sessionToken: null,
@@ -186,11 +188,26 @@ export class BackendStore {
       status: 'active',
     },
     {
+      id: 'admin',
+      email: 'admin@example.com',
+      password: 'Password123!',
+      username: 'admin',
+      displayName: 'Imeda Admin',
+      role: UserRole.ADMIN,
+      plan: SubscriptionPlan.STANDARD,
+      planExpiresAt: null,
+      sessionToken: null,
+      createdAt: iso(-150),
+      lastActive: iso(0),
+      status: 'active',
+    },
+    {
       id: 'standard',
       email: 'standard@example.com',
       password: '12345678',
+      username: 'standart',
       displayName: 'Imeda Standard Bekaia',
-      role: 'user',
+      role: UserRole.USER,
       plan: SubscriptionPlan.STANDARD,
       planExpiresAt: null,
       sessionToken: null,
@@ -247,13 +264,13 @@ export class BackendStore {
   authenticate(
     identifier: string,
     password: string,
-    role?: User['role'],
+    role?: UserRole,
   ): AuthSession | null {
     const normalizedIdentifier = identifier.trim().toLowerCase();
     const user = this.users.find(
       (item) =>
         (item.email.toLowerCase() === normalizedIdentifier ||
-          item.displayName.trim().toLowerCase() === normalizedIdentifier) &&
+          item.username.trim().toLowerCase() === normalizedIdentifier) &&
         item.password === password &&
         item.status === 'active' &&
         (!role || item.role === role),
@@ -277,11 +294,11 @@ export class BackendStore {
     return this.createSession(user);
   }
 
-  register(displayName: string, email: string, password: string): AuthSession {
+  register(username: string, displayName: string, email: string, password: string): AuthSession {
     if (this.users.some((user) => user.email.toLowerCase() === email.toLowerCase())) {
       throw new ConflictException('An account with this email already exists.');
     }
-    if (this.users.some((user) => user.displayName.trim().toLowerCase() === displayName.trim().toLowerCase())) {
+    if (this.users.some((user) => user.username.trim().toLowerCase() === username.trim().toLowerCase())) {
       throw new ConflictException('An account with this username already exists.');
     }
 
@@ -289,8 +306,9 @@ export class BackendStore {
       id: createId('user'),
       email,
       password,
+      username,
       displayName,
-      role: 'user',
+      role: UserRole.USER,
       plan: SubscriptionPlan.STANDARD,
       planExpiresAt: null,
       sessionToken: null,
@@ -299,7 +317,7 @@ export class BackendStore {
       status: 'active',
     };
     this.users.unshift(user);
-    return this.authenticate(email, password, 'user')!;
+    return this.authenticate(email, password, UserRole.USER)!;
   }
 
   validateSession(sessionToken: string): AuthSession | null {
@@ -571,7 +589,7 @@ export class BackendStore {
       activeSubscriptions * this.planConfig.unlimitedMonthlyPrice;
 
     return {
-      totalUsers: this.users.filter((user) => user.role === 'user').length,
+      totalUsers: this.users.filter((user) => user.role === UserRole.USER).length,
       activeSubscriptions,
       totalTicketsSold: this.tickets.length,
       totalRevenue,

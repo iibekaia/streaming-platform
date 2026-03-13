@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
+import { UserRole } from '@streaming-platform/data-models';
 import { SpinnerComponent } from '@streaming-platform/ui-components';
 import { ToastStore } from '@streaming-platform/ui-components';
 
@@ -33,7 +34,7 @@ export class PlatformLoginPageComponent {
     this.error.set(null);
     this.loading.set(true);
     const { identifier, password } = this.form.getRawValue();
-    this.api.login(identifier, password, 'user').subscribe({
+    this.api.login(identifier, password, UserRole.USER).subscribe({
       next: (response) => {
         this.auth.hydrateFromToken(response.accessToken);
         this.loading.set(false);

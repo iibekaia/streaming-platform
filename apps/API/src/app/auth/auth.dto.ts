@@ -1,4 +1,5 @@
-import { IsEmail, IsIn, IsOptional, IsString, Matches, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, Matches, MinLength } from 'class-validator';
+import { UserRole } from '@streaming-platform/data-models';
 
 const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
@@ -12,11 +13,15 @@ export class LoginDto {
   password!: string;
 
   @IsOptional()
-  @IsIn(['user', 'admin'])
-  role?: 'user' | 'admin';
+  @IsEnum(UserRole)
+  role?: UserRole;
 }
 
 export class RegisterDto {
+  @IsString()
+  @MinLength(3)
+  username!: string;
+
   @IsString()
   @MinLength(2)
   displayName!: string;

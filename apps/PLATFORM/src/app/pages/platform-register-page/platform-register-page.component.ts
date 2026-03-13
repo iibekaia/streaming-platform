@@ -21,6 +21,7 @@ export class PlatformRegisterPageComponent {
   protected readonly error = signal<string | null>(null);
   protected readonly loading = signal(false);
   protected readonly form = this.fb.nonNullable.group({
+    username: ['', [Validators.required, Validators.minLength(3)]],
     displayName: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
@@ -28,7 +29,7 @@ export class PlatformRegisterPageComponent {
   });
 
   submit(): void {
-    const { displayName, email, password, confirmPassword } = this.form.getRawValue();
+    const { username, displayName, email, password, confirmPassword } = this.form.getRawValue();
     if (this.form.invalid) {
       return;
     }
@@ -38,7 +39,7 @@ export class PlatformRegisterPageComponent {
     }
     this.loading.set(true);
     this.error.set(null);
-    this.api.register(displayName, email, password).subscribe({
+    this.api.register(username, displayName, email, password).subscribe({
       next: (response) => {
         this.auth.hydrateFromToken(response.accessToken);
         this.loading.set(false);

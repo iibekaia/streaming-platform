@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { AuthTokenResponse, JwtSessionClaims, Plan, SubscriptionPlan, Ticket, User } from '@streaming-platform/data-models';
+import { AuthTokenResponse, JwtSessionClaims, Plan, SubscriptionPlan, Ticket, User, UserRole } from '@streaming-platform/data-models';
 import { AuthApiService } from '@streaming-platform/api-services';
 import { decodeJwtPayload } from '@streaming-platform/utils';
 import { tap } from 'rxjs';
@@ -19,7 +19,7 @@ export class AuthStore {
   readonly loading = signal(false);
 
   readonly isAuthenticated = computed(() => !!this.user());
-  readonly isAdmin = computed(() => this.user()?.role === 'admin');
+  readonly isAdmin = computed(() => this.user()?.role === UserRole.ADMIN);
   readonly hasUnlimited = computed(() => this.user()?.plan === SubscriptionPlan.UNLIMITED);
   readonly favoriteCount = computed(() => this.favoriteMovieIds().length);
 

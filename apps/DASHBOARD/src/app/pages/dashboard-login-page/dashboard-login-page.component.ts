@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
+import { UserRole } from '@streaming-platform/data-models';
 import { SpinnerComponent, ToastStore } from '@streaming-platform/ui-components';
 
 @Component({
@@ -28,7 +29,7 @@ export class DashboardLoginPageComponent {
   submit(): void {
     const { identifier, password } = this.form.getRawValue();
     this.loading.set(true);
-    this.api.login(identifier, password, 'admin').subscribe({
+    this.api.login(identifier, password, UserRole.ADMIN).subscribe({
       next: (response) => {
         this.auth.hydrateFromToken(response.accessToken);
         this.loading.set(false);

@@ -18,6 +18,10 @@
       </div>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         <div class="rounded-[1.5rem] border border-slate-200 p-4">
+          <p class="text-sm text-slate-500">Username</p>
+          <p class="mt-1 font-medium text-slate-900">{{ auth.user()?.username }}</p>
+        </div>
+        <div class="rounded-[1.5rem] border border-slate-200 p-4">
           <p class="text-sm text-slate-500">Email</p>
           <p class="mt-1 flex items-center gap-2 font-medium text-slate-900">
             <svg siEnvelopeIcon class="h-4 w-4 text-slate-400"></svg>

@@ -53,7 +53,7 @@ export class AuthController {
 
   @Post('register')
   register(@Body() dto: RegisterDto, @Res({ passthrough: true }) response: Response): AuthTokenResponse {
-    const session = this.store.register(dto.displayName, dto.email, dto.password);
+    const session = this.store.register(dto.username, dto.displayName, dto.email, dto.password);
     const refreshId = this.store.startRefreshSession(session.user.id, session.session.sessionToken);
     const tokenPair = this.tokens.createTokenPair(session, refreshId);
     this.setAuthCookies(response, tokenPair.accessToken, tokenPair.refreshToken);
