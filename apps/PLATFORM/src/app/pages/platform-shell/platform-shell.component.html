@@ -16,10 +16,22 @@
         </a>
       </nav>
       <div class="flex items-center gap-3">
-        <div class="rounded-full bg-violet-50 px-4 py-2 text-sm text-violet-700">{{ planLabel() }}</div>
         <a routerLink="/account" class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-700">
           <svg siUserCircleIcon class="h-5 w-5 text-slate-500"></svg>
           {{ userDisplay() }}
+          <span
+            class="inline-flex h-7 w-7 items-center justify-center rounded-full border"
+            [class.border-violet-200]="auth.hasUnlimited()"
+            [class.bg-violet-50]="auth.hasUnlimited()"
+            [class.text-violet-600]="auth.hasUnlimited()"
+            [class.border-slate-200]="!auth.hasUnlimited()"
+            [class.bg-slate-100]="!auth.hasUnlimited()"
+            [class.text-slate-500]="!auth.hasUnlimited()"
+            [attr.title]="planLabel()"
+            [attr.aria-label]="planLabel()"
+          >
+            <svg siSparklesIcon class="h-4 w-4"></svg>
+          </span>
         </a>
         <button class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-700" (click)="logout()">
           <svg siArrowLeftOnRectangleIcon class="h-4 w-4"></svg>
