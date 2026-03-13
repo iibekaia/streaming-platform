@@ -2,11 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { AnalyticsSummary, PaginatedResponse, PaginationQuery, PlanConfig, User } from '@streaming-platform/data-models';
 import { Observable, map } from 'rxjs';
+import { API_BASE_URL } from './api-config';
 
 @Injectable({ providedIn: 'root' })
 export class AdminApiService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:3000/api/admin';
+  private readonly baseUrl = `${inject(API_BASE_URL)}/admin`;
 
   analytics(): Observable<AnalyticsSummary> {
     return this.http.get<AnalyticsSummary>(`${this.baseUrl}/analytics`, { withCredentials: true });

@@ -2,11 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Movie, MovieQuery, PaginatedResponse } from '@streaming-platform/data-models';
 import { Observable, map } from 'rxjs';
+import { API_BASE_URL } from './api-config';
 
 @Injectable({ providedIn: 'root' })
 export class MovieApiService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:3000/api';
+  private readonly baseUrl = inject(API_BASE_URL);
 
   list(query: MovieQuery = {}): Observable<PaginatedResponse<Movie>> {
     let params = new HttpParams();
