@@ -190,7 +190,7 @@ export class BackendStore {
     {
       id: 'admin',
       email: 'admin@example.com',
-      password: 'Password123!',
+      password: '12345678',
       username: 'admin',
       displayName: 'Imeda Admin',
       role: UserRole.ADMIN,
