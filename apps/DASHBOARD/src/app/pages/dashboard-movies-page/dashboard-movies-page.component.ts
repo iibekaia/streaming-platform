@@ -4,12 +4,13 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { Category, Movie } from '@streaming-platform/data-models';
+import { ModalComponent } from '@streaming-platform/ui-components';
 import { formatPrice } from '@streaming-platform/utils';
 import { finalize } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ModalComponent],
   templateUrl: './dashboard-movies-page.component.html',
 })
 export class DashboardMoviesPageComponent {

@@ -1,0 +1,25 @@
+<div
+  class="fixed inset-0 z-50 flex justify-center px-4"
+  [class.items-start]="position() === 'top'"
+  [class.py-8]="position() === 'top'"
+  [class.items-center]="position() === 'center'"
+  [class.py-4]="position() === 'center'"
+  [ngClass]="overlayClass()"
+>
+  <div
+    class="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-[2rem] shadow-xl"
+    [ngClass]="panelClass()"
+  >
+    <div class="modal-header shrink-0 border-b border-slate-200 px-6 py-5" [ngClass]="headerClass()">
+      <ng-content select="[modal-header]" />
+    </div>
+    <div class="modal-content min-h-0 flex-1 overflow-y-auto px-6 py-6" [ngClass]="contentClass()">
+      <ng-content select="[modal-content]" />
+    </div>
+    <div class="modal-actions shrink-0 border-t border-slate-200 px-6 py-4" [ngClass]="actionsClass()">
+      <div class="flex justify-end gap-3">
+        <ng-content select="[modal-actions]" />
+      </div>
+    </div>
+  </div>
+</div>

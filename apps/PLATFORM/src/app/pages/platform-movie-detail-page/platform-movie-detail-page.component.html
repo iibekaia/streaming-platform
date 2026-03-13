@@ -77,9 +77,9 @@
   </section>
 
   @if (playing()) {
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
-      <div #playerFrame class="w-full max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950 shadow-2xl">
-        <div class="flex items-center justify-between border-b border-white/10 px-5 py-4 text-white">
+    <ui-modal overlayClass="bg-slate-950/85" panelClass="max-w-6xl border border-white/10 bg-slate-950 shadow-2xl" position="center" headerClass="border-white/10 px-5 py-4 text-white" contentClass="p-0" actionsClass="hidden">
+      <div #playerFrame class="flex min-h-0 w-full flex-1 flex-col">
+        <div modal-header class="flex items-center justify-between gap-4">
           <div>
             <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Now playing</p>
             <h2 class="mt-1 text-lg font-semibold">{{ movie()!.title }}</h2>
@@ -103,8 +103,10 @@
             </button>
           </div>
         </div>
-        <video controls autoplay class="aspect-video w-full bg-black" [src]="movie()!.videoUrl"></video>
+        <div modal-content>
+          <video controls autoplay class="aspect-video w-full bg-black" [src]="movie()!.videoUrl"></video>
+        </div>
       </div>
-    </div>
+    </ui-modal>
   }
 }

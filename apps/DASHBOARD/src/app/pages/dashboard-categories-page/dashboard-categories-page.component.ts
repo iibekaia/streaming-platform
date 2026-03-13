@@ -4,12 +4,12 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryApiService } from '@streaming-platform/api-services';
 import { Category } from '@streaming-platform/data-models';
-import { ToastStore } from '@streaming-platform/ui-components';
+import { ModalComponent, ToastStore } from '@streaming-platform/ui-components';
 import { slugify } from '@streaming-platform/utils';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ModalComponent],
   templateUrl: './dashboard-categories-page.component.html',
 })
 export class DashboardCategoriesPageComponent {

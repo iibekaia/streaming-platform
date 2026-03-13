@@ -4,13 +4,13 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthApiService, CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
 import { Category, Movie, SubscriptionPlan } from '@streaming-platform/data-models';
-import { SpinnerComponent, ToastStore } from '@streaming-platform/ui-components';
+import { ModalComponent, SpinnerComponent, ToastStore } from '@streaming-platform/ui-components';
 import { formatPrice, formatRuntime } from '@streaming-platform/utils';
 import { SiArrowsPointingOutIcon, SiXMarkIcon } from '@semantic-icons/heroicons/24/outline';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, SpinnerComponent, SiArrowsPointingOutIcon, SiXMarkIcon],
+  imports: [CommonModule, RouterLink, SpinnerComponent, ModalComponent, SiArrowsPointingOutIcon, SiXMarkIcon],
   templateUrl: './platform-movie-detail-page.component.html',
 })
 export class PlatformMovieDetailPageComponent {
