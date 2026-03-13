@@ -40,7 +40,7 @@ export class AuthController {
 
   @Post('login')
   login(@Body() dto: LoginDto, @Res({ passthrough: true }) response: Response): AuthTokenResponse {
-    const session = this.store.authenticate(dto.email, dto.password, dto.role);
+    const session = this.store.authenticate(dto.identifier, dto.password, dto.role);
     if (!session) {
       throw new UnauthorizedException('Invalid credentials or account access.');
     }

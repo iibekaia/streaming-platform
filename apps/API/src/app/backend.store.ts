@@ -9,6 +9,7 @@ import {
   Plan,
   PlanConfig,
   PurchaseResult,
+  SubscriptionPlan,
   Ticket,
   User,
 } from '@streaming-platform/data-models';
@@ -175,9 +176,9 @@ export class BackendStore {
       id: 'user-ava',
       email: 'ava@example.com',
       password: 'Password123!',
-      displayName: 'Ava Bennett',
+      displayName: 'Imeda Bekaia',
       role: 'user',
-      plan: 'unlimited',
+      plan: SubscriptionPlan.UNLIMITED,
       planExpiresAt: iso(20),
       sessionToken: null,
       createdAt: iso(-40),
@@ -185,12 +186,12 @@ export class BackendStore {
       status: 'active',
     },
     {
-      id: 'admin-jules',
-      email: 'admin@example.com',
-      password: 'Admin123!',
-      displayName: 'Jules Mercer',
-      role: 'admin',
-      plan: 'free',
+      id: 'standard',
+      email: 'standard@example.com',
+      password: '12345678',
+      displayName: 'Imeda Standard Bekaia',
+      role: 'user',
+      plan: SubscriptionPlan.STANDARD,
       planExpiresAt: null,
       sessionToken: null,
       createdAt: iso(-150),
@@ -211,7 +212,7 @@ export class BackendStore {
     {
       id: 'plan-ava',
       userId: 'user-ava',
-      type: 'unlimited',
+      type: SubscriptionPlan.UNLIMITED,
       startedAt: iso(-10),
       expiresAt: iso(20),
       status: 'active',
@@ -244,13 +245,15 @@ export class BackendStore {
   }
 
   authenticate(
-    email: string,
+    identifier: string,
     password: string,
     role?: User['role'],
   ): AuthSession | null {
+    const normalizedIdentifier = identifier.trim().toLowerCase();
     const user = this.users.find(
       (item) =>
-        item.email.toLowerCase() === email.toLowerCase() &&
+        (item.email.toLowerCase() === normalizedIdentifier ||
+          item.displayName.trim().toLowerCase() === normalizedIdentifier) &&
         item.password === password &&
         item.status === 'active' &&
         (!role || item.role === role),
@@ -278,6 +281,9 @@ export class BackendStore {
     if (this.users.some((user) => user.email.toLowerCase() === email.toLowerCase())) {
       throw new ConflictException('An account with this email already exists.');
     }
+    if (this.users.some((user) => user.displayName.trim().toLowerCase() === displayName.trim().toLowerCase())) {
+      throw new ConflictException('An account with this username already exists.');
+    }
 
     const user: User = {
       id: createId('user'),
@@ -285,7 +291,7 @@ export class BackendStore {
       password,
       displayName,
       role: 'user',
-      plan: 'free',
+      plan: SubscriptionPlan.STANDARD,
       planExpiresAt: null,
       sessionToken: null,
       createdAt: new Date().toISOString(),
@@ -427,7 +433,7 @@ export class BackendStore {
     const plan: Plan = {
       id: createId('plan'),
       userId,
-      type: 'unlimited',
+      type: SubscriptionPlan.UNLIMITED,
       startedAt: new Date().toISOString(),
       expiresAt: iso(30),
       status: 'active',
@@ -435,7 +441,7 @@ export class BackendStore {
     this.plans = [plan, ...this.plans.filter((item) => item.userId !== userId)];
     this.users = this.users.map((user) =>
       user.id === userId
-        ? { ...user, plan: 'unlimited', planExpiresAt: plan.expiresAt }
+        ? { ...user, plan: SubscriptionPlan.UNLIMITED, planExpiresAt: plan.expiresAt }
         : user,
     );
     return this.entitlements(userId);

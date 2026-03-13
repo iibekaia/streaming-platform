@@ -1,7 +1,11 @@
 export type UserRole = 'user' | 'admin';
-export type UserPlanType = 'free' | 'unlimited';
 export type MovieStatus = 'draft' | 'published';
 export type UserStatus = 'active' | 'suspended';
+
+export enum SubscriptionPlan {
+  STANDARD = 'standard',
+  UNLIMITED = 'unlimited',
+}
 
 export interface Category {
   id: string;
@@ -41,7 +45,7 @@ export interface Ticket {
 export interface Plan {
   id: string;
   userId: string;
-  type: 'unlimited';
+  type: SubscriptionPlan.UNLIMITED;
   startedAt: string;
   expiresAt: string;
   status: 'active' | 'expired';
@@ -72,7 +76,7 @@ export interface User {
   password: string;
   displayName: string;
   role: UserRole;
-  plan: UserPlanType;
+  plan: SubscriptionPlan;
   planExpiresAt?: string | null;
   sessionToken?: string | null;
   createdAt: string;

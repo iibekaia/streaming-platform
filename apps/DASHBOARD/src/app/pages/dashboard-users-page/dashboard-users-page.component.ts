@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { AdminApiService } from '@streaming-platform/api-services';
-import { User } from '@streaming-platform/data-models';
+import { SubscriptionPlan, User } from '@streaming-platform/data-models';
 
 @Component({
   standalone: true,
@@ -10,6 +10,10 @@ import { User } from '@streaming-platform/data-models';
 })
 export class DashboardUsersPageComponent {
   private readonly adminApi = inject(AdminApiService);
+  protected readonly planLabels: Record<SubscriptionPlan, string> = {
+    [SubscriptionPlan.STANDARD]: 'STANDARD',
+    [SubscriptionPlan.UNLIMITED]: 'UNLIMITED',
+  };
   protected readonly users = signal<Array<Omit<User, 'password'>>>([]);
   protected readonly page = signal(1);
   protected readonly pageSize = 8;

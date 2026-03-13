@@ -3,7 +3,7 @@ import { Component, ElementRef, computed, inject, signal, viewChild } from '@ang
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthApiService, CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
-import { Category, Movie } from '@streaming-platform/data-models';
+import { Category, Movie, SubscriptionPlan } from '@streaming-platform/data-models';
 import { SpinnerComponent, ToastStore } from '@streaming-platform/ui-components';
 import { formatPrice, formatRuntime } from '@streaming-platform/utils';
 import { SiArrowsPointingOutIcon, SiXMarkIcon } from '@semantic-icons/heroicons/24/outline';
@@ -63,7 +63,7 @@ export class PlatformMovieDetailPageComponent {
       return;
     }
     this.authApi.buyUnlimited(user.id).subscribe((result) => {
-      this.auth.user.update((current) => (current ? { ...current, plan: 'unlimited' } : current));
+      this.auth.user.update((current) => (current ? { ...current, plan: SubscriptionPlan.UNLIMITED } : current));
       this.auth.tickets.set(result.tickets);
       this.auth.activePlan.set(result.activePlan ?? null);
       this.toasts.show('UNLIMITED activated.', 'success');

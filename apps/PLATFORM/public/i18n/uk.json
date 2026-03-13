@@ -42,7 +42,7 @@
   },
   "plans": {
     "title": "Оберіть, як ви хочете дивитися",
-    "free": "Безкоштовно",
+    "standard": "STANDARD",
     "unlimited": "UNLIMITED",
     "monthly": "на місяць"
   },

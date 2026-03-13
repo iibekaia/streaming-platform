@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthStore } from '@streaming-platform/auth-lib';
+import { SubscriptionPlan } from '@streaming-platform/data-models';
 import { FooterComponent, ToastStore, TranslatePipe } from '@streaming-platform/ui-components';
 import { SiFilmIcon, SiPlayCircleIcon, SiSparklesIcon, SiUserCircleIcon } from '@semantic-icons/heroicons/24/outline';
 import { SiArrowLeftOnRectangleIcon } from '@semantic-icons/heroicons/24/solid';
@@ -16,7 +17,7 @@ export class PlatformShellComponent {
   private readonly toasts = inject(ToastStore);
 
   protected readonly planLabel = computed(() =>
-    this.auth.hasUnlimited() ? 'UNLIMITED' : 'Free plan',
+    this.auth.hasUnlimited() ? SubscriptionPlan.UNLIMITED.toUpperCase() : SubscriptionPlan.STANDARD.toUpperCase(),
   );
   protected readonly userDisplay = computed(() => this.auth.user()?.displayName ?? 'Account');
 

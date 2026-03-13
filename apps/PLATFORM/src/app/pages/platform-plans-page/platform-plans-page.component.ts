@@ -3,6 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
+import { SubscriptionPlan } from '@streaming-platform/data-models';
 import { SpinnerComponent, ToastStore } from '@streaming-platform/ui-components';
 import { formatPrice } from '@streaming-platform/utils';
 
@@ -27,7 +28,7 @@ export class PlatformPlansPageComponent {
     }
     this.loading.set(true);
     this.api.buyUnlimited(user.id).subscribe((result) => {
-      this.auth.user.update((current) => (current ? { ...current, plan: 'unlimited' } : current));
+      this.auth.user.update((current) => (current ? { ...current, plan: SubscriptionPlan.UNLIMITED } : current));
       this.auth.activePlan.set(result.activePlan ?? null);
       this.loading.set(false);
       this.toasts.show('UNLIMITED plan activated.', 'success');

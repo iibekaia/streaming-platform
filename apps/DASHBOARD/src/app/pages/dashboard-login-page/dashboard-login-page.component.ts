@@ -21,14 +21,14 @@ export class DashboardLoginPageComponent {
   protected readonly error = signal<string | null>(null);
   protected readonly loading = signal(false);
   protected readonly form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    identifier: ['', [Validators.required, Validators.minLength(2)]],
     password: ['', [Validators.required]],
   });
 
   submit(): void {
-    const { email, password } = this.form.getRawValue();
+    const { identifier, password } = this.form.getRawValue();
     this.loading.set(true);
-    this.api.login(email, password, 'admin').subscribe({
+    this.api.login(identifier, password, 'admin').subscribe({
       next: (response) => {
         this.auth.hydrateFromToken(response.accessToken);
         this.loading.set(false);

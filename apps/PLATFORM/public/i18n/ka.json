@@ -42,7 +42,7 @@
   },
   "plans": {
     "title": "აირჩიეთ როგორ გსურთ ყურება",
-    "free": "უფასო",
+    "standard": "STANDARD",
     "unlimited": "UNLIMITED",
     "monthly": "თვეში"
   },

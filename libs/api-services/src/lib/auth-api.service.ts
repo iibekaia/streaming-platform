@@ -8,8 +8,8 @@ export class AuthApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = 'http://localhost:3000/api';
 
-  login(email: string, password: string, role?: 'user' | 'admin'): Observable<AuthTokenResponse> {
-    return this.http.post<AuthTokenResponse>(`${this.baseUrl}/auth/login`, { email, password, role }, { withCredentials: true });
+  login(identifier: string, password: string, role?: 'user' | 'admin'): Observable<AuthTokenResponse> {
+    return this.http.post<AuthTokenResponse>(`${this.baseUrl}/auth/login`, { identifier, password, role }, { withCredentials: true });
   }
 
   register(displayName: string, email: string, password: string): Observable<AuthTokenResponse> {

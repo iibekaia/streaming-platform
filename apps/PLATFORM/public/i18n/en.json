@@ -42,7 +42,7 @@
   },
   "plans": {
     "title": "Choose how you want to watch",
-    "free": "Free",
+    "standard": "STANDARD",
     "unlimited": "UNLIMITED",
     "monthly": "monthly"
   },

@@ -3,8 +3,9 @@ import { IsEmail, IsIn, IsOptional, IsString, Matches, MinLength } from 'class-v
 const strongPasswordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
 
 export class LoginDto {
-  @IsEmail()
-  email!: string;
+  @IsString()
+  @MinLength(2)
+  identifier!: string;
 
   @IsString()
   @MinLength(8)

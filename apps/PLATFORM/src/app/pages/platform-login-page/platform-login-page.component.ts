@@ -22,7 +22,7 @@ export class PlatformLoginPageComponent {
   protected readonly error = signal<string | null>(null);
   protected readonly loading = signal(false);
   protected readonly form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    identifier: ['', [Validators.required, Validators.minLength(2)]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
@@ -32,8 +32,8 @@ export class PlatformLoginPageComponent {
     }
     this.error.set(null);
     this.loading.set(true);
-    const { email, password } = this.form.getRawValue();
-    this.api.login(email, password, 'user').subscribe({
+    const { identifier, password } = this.form.getRawValue();
+    this.api.login(identifier, password, 'user').subscribe({
       next: (response) => {
         this.auth.hydrateFromToken(response.accessToken);
         this.loading.set(false);
