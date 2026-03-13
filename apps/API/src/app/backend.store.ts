@@ -559,22 +559,17 @@ export class BackendStore {
     return nextCategory;
   }
 
-  deleteCategory(categoryId: string): { softDeleted: boolean } {
+  deleteCategory(categoryId: string): { ok: true } {
     const linked = this.movies.some((movie) =>
       movie.categories.includes(categoryId),
     );
     if (linked) {
-      this.categories = this.categories.map((category) =>
-        category.id === categoryId
-          ? { ...category, deletedAt: new Date().toISOString() }
-          : category,
-      );
-      return { softDeleted: true };
+      throw new ConflictException('This category cannot be deleted because at least one movie is assigned to it.');
     }
     this.categories = this.categories.filter(
       (category) => category.id !== categoryId,
     );
-    return { softDeleted: false };
+    return { ok: true };
   }
 
   analytics(): AnalyticsSummary {

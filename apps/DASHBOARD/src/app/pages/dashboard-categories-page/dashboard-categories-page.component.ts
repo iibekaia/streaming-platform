@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryApiService } from '@streaming-platform/api-services';
 import { Category } from '@streaming-platform/data-models';
+import { ToastStore } from '@streaming-platform/ui-components';
 import { slugify } from '@streaming-platform/utils';
 
 @Component({
@@ -16,6 +17,7 @@ export class DashboardCategoriesPageComponent {
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly toasts = inject(ToastStore);
 
   protected readonly categories = signal<Array<Category & { movieCount: number }>>([]);
   protected readonly selectedId = signal<string | null>(null);
@@ -73,7 +75,15 @@ export class DashboardCategoriesPageComponent {
   }
 
   remove(categoryId: string): void {
-    this.categoriesApi.delete(categoryId).subscribe(() => this.refresh());
+    this.categoriesApi.delete(categoryId).subscribe({
+      next: () => {
+        this.toasts.show('Category deleted.', 'success');
+        this.refresh();
+      },
+      error: (error) => {
+        this.toasts.show(error?.error?.message ?? 'Category could not be deleted.', 'error');
+      },
+    });
   }
 
   changePage(nextPage: number): void {

@@ -13,7 +13,9 @@
           </div>
           <div class="flex gap-2">
             <button class="rounded-xl border border-slate-200 px-3 py-2 text-sm" (click)="edit(category)">Edit</button>
-            <button class="rounded-xl border border-red-200 px-3 py-2 text-sm text-red-700" (click)="remove(category.id)">Delete</button>
+            @if (category.movieCount === 0) {
+              <button class="rounded-xl border border-red-200 px-3 py-2 text-sm text-red-700" (click)="remove(category.id)">Delete</button>
+            }
           </div>
         </div>
       }

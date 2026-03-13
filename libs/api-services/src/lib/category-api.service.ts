@@ -26,7 +26,7 @@ export class CategoryApiService {
       : this.http.post<Category>(`${this.baseUrl}/admin/categories`, category, { withCredentials: true });
   }
 
-  delete(categoryId: string): Observable<{ softDeleted: boolean }> {
-    return this.http.delete<{ softDeleted: boolean }>(`${this.baseUrl}/admin/categories/${categoryId}`, { withCredentials: true });
+  delete(categoryId: string): Observable<{ ok: true }> {
+    return this.http.delete<{ ok: true }>(`${this.baseUrl}/admin/categories/${categoryId}`, { withCredentials: true });
   }
 }
