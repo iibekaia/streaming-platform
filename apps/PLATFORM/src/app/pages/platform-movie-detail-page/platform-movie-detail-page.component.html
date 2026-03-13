@@ -46,7 +46,7 @@
               <h2 class="text-xl font-semibold text-emerald-900">Watch now</h2>
               <p class="text-sm text-emerald-700">Your entitlements already cover this title.</p>
             </div>
-            <button class="rounded-2xl bg-emerald-600 px-5 py-3 font-medium text-white" (click)="playing.set(true)">Play</button>
+            <button class="rounded-2xl bg-emerald-600 px-5 py-3 font-medium text-white" (click)="openPlayer()">Play</button>
           </div>
         </div>
       } @else {
@@ -65,9 +65,38 @@
         </div>
       }
 
-      @if (playing()) {
-        <video controls class="w-full rounded-[1.5rem] bg-slate-950" [src]="movie()!.videoUrl"></video>
-      }
     </div>
   </section>
+
+  @if (playing()) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
+      <div #playerFrame class="w-full max-w-6xl overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-white/10 px-5 py-4 text-white">
+          <div>
+            <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Now playing</p>
+            <h2 class="mt-1 text-lg font-semibold">{{ movie()!.title }}</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white transition hover:bg-white/10"
+              (click)="toggleFullscreen()"
+            >
+              <svg siArrowsPointingOutIcon class="h-4 w-4"></svg>
+              Full screen
+            </button>
+            <button
+              type="button"
+              class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition hover:bg-white/10"
+              aria-label="Close player"
+              (click)="closePlayer()"
+            >
+              <svg siXMarkIcon class="h-5 w-5"></svg>
+            </button>
+          </div>
+        </div>
+        <video controls autoplay class="aspect-video w-full bg-black" [src]="movie()!.videoUrl"></video>
+      </div>
+    </div>
+  }
 }

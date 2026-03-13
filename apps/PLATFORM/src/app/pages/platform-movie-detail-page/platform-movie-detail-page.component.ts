@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthApiService, CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
 import { Category, Movie } from '@streaming-platform/data-models';
 import { SpinnerComponent, ToastStore } from '@streaming-platform/ui-components';
 import { formatPrice, formatRuntime } from '@streaming-platform/utils';
-import { SiHeartIcon } from '@semantic-icons/heroicons/24/outline';
+import { SiArrowsPointingOutIcon, SiHeartIcon, SiXMarkIcon } from '@semantic-icons/heroicons/24/outline';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, SpinnerComponent, SiHeartIcon],
+  imports: [CommonModule, RouterLink, SpinnerComponent, SiHeartIcon, SiArrowsPointingOutIcon, SiXMarkIcon],
   templateUrl: './platform-movie-detail-page.component.html',
 })
 export class PlatformMovieDetailPageComponent {
@@ -20,6 +20,7 @@ export class PlatformMovieDetailPageComponent {
   private readonly authApi = inject(AuthApiService);
   protected readonly auth = inject(AuthStore);
   private readonly toasts = inject(ToastStore);
+  private readonly playerFrame = viewChild<ElementRef<HTMLDivElement>>('playerFrame');
 
   protected readonly movie = signal<Movie | undefined>(undefined);
   protected readonly categories = signal<Category[]>([]);
@@ -71,5 +72,30 @@ export class PlatformMovieDetailPageComponent {
 
   toggleFavorite(movieId: string): void {
     this.auth.toggleFavorite(movieId);
+  }
+
+  openPlayer(): void {
+    this.playing.set(true);
+  }
+
+  closePlayer(): void {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+    }
+    this.playing.set(false);
+  }
+
+  toggleFullscreen(): void {
+    const frame = this.playerFrame()?.nativeElement;
+    if (!frame) {
+      return;
+    }
+
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+      return;
+    }
+
+    void frame.requestFullscreen();
   }
 }
