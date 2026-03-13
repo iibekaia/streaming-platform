@@ -7,14 +7,14 @@ import { tap } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
   private readonly api = inject(AuthApiService);
-  private readonly favoritesStorageKey = 'sp.favoriteMovieIds';
+  private readonly legacyFavoritesStorageKey = 'sp.favoriteMovieIds';
 
   readonly user = signal<Omit<User, 'password'> | null>(null);
   readonly tickets = signal<Ticket[]>([]);
   readonly activePlan = signal<Plan | null>(null);
   readonly accessToken = signal<string | null>(null);
   readonly claims = signal<JwtSessionClaims | null>(null);
-  readonly favoriteMovieIds = signal<string[]>(this.readFavorites());
+  readonly favoriteMovieIds = signal<string[]>([]);
   readonly sessionMessage = signal<string | null>(null);
   readonly loading = signal(false);
 
@@ -40,6 +40,7 @@ export class AuthStore {
       })),
     );
     this.activePlan.set(claims.activePlan ?? null);
+    this.favoriteMovieIds.set(this.readFavorites(claims.user.id));
     this.sessionMessage.set(null);
   }
 
@@ -49,6 +50,7 @@ export class AuthStore {
     this.activePlan.set(null);
     this.accessToken.set(null);
     this.claims.set(null);
+    this.favoriteMovieIds.set([]);
     this.sessionMessage.set(message ?? null);
   }
 
@@ -96,32 +98,52 @@ export class AuthStore {
   }
 
   toggleFavorite(movieId: string): void {
+    const userId = this.user()?.id;
+    if (!userId) {
+      return;
+    }
+
     const nextFavorites = this.isFavorite(movieId)
       ? this.favoriteMovieIds().filter((id) => id !== movieId)
-      : [...this.favoriteMovieIds(), movieId];
-
+      : [...new Set([...this.favoriteMovieIds(), movieId])];
     this.favoriteMovieIds.set(nextFavorites);
-    this.writeFavorites(nextFavorites);
+    this.writeFavorites(userId, nextFavorites);
   }
 
-  private readFavorites(): string[] {
+  private favoritesStorageKey(userId: string): string {
+    return `sp.favoriteMovieIds.${userId}`;
+  }
+
+  private readFavorites(userId: string): string[] {
     if (typeof localStorage === 'undefined') {
       return [];
     }
 
     try {
-      const stored = localStorage.getItem(this.favoritesStorageKey);
-      return stored ? (JSON.parse(stored) as string[]) : [];
+      const scopedFavorites = localStorage.getItem(this.favoritesStorageKey(userId));
+      if (scopedFavorites) {
+        return JSON.parse(scopedFavorites) as string[];
+      }
+
+      const legacyFavorites = localStorage.getItem(this.legacyFavoritesStorageKey);
+      if (!legacyFavorites) {
+        return [];
+      }
+
+      const parsedFavorites = JSON.parse(legacyFavorites) as string[];
+      this.writeFavorites(userId, parsedFavorites);
+      localStorage.removeItem(this.legacyFavoritesStorageKey);
+      return parsedFavorites;
     } catch {
       return [];
     }
   }
 
-  private writeFavorites(movieIds: string[]): void {
+  private writeFavorites(userId: string, movieIds: string[]): void {
     if (typeof localStorage === 'undefined') {
       return;
     }
 
-    localStorage.setItem(this.favoritesStorageKey, JSON.stringify(movieIds));
+    localStorage.setItem(this.favoritesStorageKey(userId), JSON.stringify(movieIds));
   }
 }

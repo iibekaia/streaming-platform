@@ -29,7 +29,15 @@
           [attr.aria-label]="auth.isFavorite(movie()!.id) ? 'Remove from favorites' : 'Add to favorites'"
           (click)="toggleFavorite(movie()!.id)"
         >
-          <svg siHeartIcon class="h-6 w-6"></svg>
+          @if (auth.isFavorite(movie()!.id)) {
+            <svg viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6" aria-hidden="true">
+              <path d="M11.645 20.91l-.007-.003-.022-.012a14.91 14.91 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.175 2.25 8.25A4.5 4.5 0 0 1 6.75 3.75c1.92 0 3.684.98 4.695 2.577A5.63 5.63 0 0 1 12 7.09a5.63 5.63 0 0 1 .555-.763A5.55 5.55 0 0 1 17.25 3.75a4.5 4.5 0 0 1 4.5 4.5c0 3.925-2.438 7.11-4.739 9.257a25.175 25.175 0 0 1-4.244 3.17 14.876 14.876 0 0 1-.405.23l-.01.006-.004.002h-.002a.75.75 0 0 1-.7 0z" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-6 w-6" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21.435 7.287c.719 2.657-.249 5.831-2.984 8.367C15.696 18.212 12.41 20.12 12 20.347c-.41-.227-3.696-2.135-6.451-4.693C2.814 13.118 1.846 9.944 2.565 7.287A4.5 4.5 0 0 1 6.75 3.75c1.92 0 3.684.98 4.695 2.577A5.64 5.64 0 0 1 12 7.09c.187-.28.373-.534.555-.763A5.55 5.55 0 0 1 17.25 3.75a4.5 4.5 0 0 1 4.185 3.537Z" />
+            </svg>
+          }
         </button>
       </div>
       <div class="grid gap-4 text-sm text-slate-600 md:grid-cols-2">

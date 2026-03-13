@@ -8,11 +8,10 @@ import { SearchBarComponent, SpinnerComponent } from '@streaming-platform/ui-com
 import { formatPrice, formatRuntime } from '@streaming-platform/utils';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SiHeartIcon } from '@semantic-icons/heroicons/24/outline';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, SearchBarComponent, SpinnerComponent, SiHeartIcon],
+  imports: [CommonModule, RouterLink, SearchBarComponent, SpinnerComponent],
   templateUrl: './platform-movies-page.component.html',
 })
 export class PlatformMoviesPageComponent {

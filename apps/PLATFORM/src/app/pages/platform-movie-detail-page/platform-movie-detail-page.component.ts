@@ -6,11 +6,11 @@ import { AuthStore } from '@streaming-platform/auth-lib';
 import { Category, Movie } from '@streaming-platform/data-models';
 import { SpinnerComponent, ToastStore } from '@streaming-platform/ui-components';
 import { formatPrice, formatRuntime } from '@streaming-platform/utils';
-import { SiArrowsPointingOutIcon, SiHeartIcon, SiXMarkIcon } from '@semantic-icons/heroicons/24/outline';
+import { SiArrowsPointingOutIcon, SiXMarkIcon } from '@semantic-icons/heroicons/24/outline';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, SpinnerComponent, SiHeartIcon, SiArrowsPointingOutIcon, SiXMarkIcon],
+  imports: [CommonModule, RouterLink, SpinnerComponent, SiArrowsPointingOutIcon, SiXMarkIcon],
   templateUrl: './platform-movie-detail-page.component.html',
 })
 export class PlatformMovieDetailPageComponent {
