@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthStore } from '@streaming-platform/auth-lib';
-import { FooterComponent, TranslatePipe } from '@streaming-platform/ui-components';
+import { TranslatePipe } from '@streaming-platform/ui-components';
 import { SiChartBarSquareIcon, SiFilmIcon, SiTagIcon, SiUsersIcon } from '@semantic-icons/heroicons/24/outline';
 import { SiArrowLeftOnRectangleIcon, SiCreditCardIcon } from '@semantic-icons/heroicons/24/solid';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, FooterComponent, TranslatePipe, SiChartBarSquareIcon, SiFilmIcon, SiTagIcon, SiUsersIcon, SiCreditCardIcon, SiArrowLeftOnRectangleIcon],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet, TranslatePipe, SiChartBarSquareIcon, SiFilmIcon, SiTagIcon, SiUsersIcon, SiCreditCardIcon, SiArrowLeftOnRectangleIcon],
   templateUrl: './dashboard-shell.component.html',
 })
 export class DashboardShellComponent {
