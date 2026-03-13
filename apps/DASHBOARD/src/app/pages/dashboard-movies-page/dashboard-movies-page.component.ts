@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { Category, Movie } from '@streaming-platform/data-models';
 import { formatPrice } from '@streaming-platform/utils';
@@ -15,6 +16,8 @@ export class DashboardMoviesPageComponent {
   private readonly moviesApi = inject(MovieApiService);
   private readonly categoriesApi = inject(CategoryApiService);
   private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   protected readonly movies = signal<Movie[]>([]);
   protected readonly categories = signal<Category[]>([]);
@@ -53,6 +56,7 @@ export class DashboardMoviesPageComponent {
   });
 
   constructor() {
+    this.page.set(this.readPageFromUrl());
     this.refresh();
     this.categoriesApi.listAll().subscribe((categories) => this.categories.set(categories));
   }
@@ -168,7 +172,7 @@ export class DashboardMoviesPageComponent {
       return;
     }
 
-    this.page.set(nextPage);
+    this.setPageState(nextPage);
     this.refresh();
   }
 
@@ -186,5 +190,20 @@ export class DashboardMoviesPageComponent {
         this.total.set(response.total);
         this.totalPages.set(response.totalPages);
       });
+  }
+
+  private readPageFromUrl(): number {
+    const rawPage = Number(this.route.snapshot.queryParamMap.get('page') ?? '1');
+    return Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
+  }
+
+  private setPageState(page: number): void {
+    this.page.set(page);
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: page === 1 ? null : page },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CategoryApiService, MovieApiService } from '@streaming-platform/api-services';
 import { AuthStore } from '@streaming-platform/auth-lib';
 import { Category, Movie } from '@streaming-platform/data-models';
@@ -17,6 +17,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class PlatformMoviesPageComponent {
   private readonly moviesApi = inject(MovieApiService);
   private readonly categoriesApi = inject(CategoryApiService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   protected readonly auth = inject(AuthStore);
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchChanges = new Subject<string>();
@@ -42,6 +44,7 @@ export class PlatformMoviesPageComponent {
   });
 
   constructor() {
+    this.page.set(this.readPageFromUrl());
     this.categoriesApi.listAll().subscribe((categories) => this.categories.set(categories));
     this.searchChanges
       .pipe(
@@ -69,7 +72,7 @@ export class PlatformMoviesPageComponent {
 
   onSearch(value: string): void {
     this.search.set(value);
-    this.page.set(1);
+    this.setPageState(1);
     this.loading.set(true);
     this.searchChanges.next(value);
   }
@@ -79,7 +82,7 @@ export class PlatformMoviesPageComponent {
     this.selectedCategories.set(
       current.includes(categoryId) ? current.filter((id) => id !== categoryId) : [...current, categoryId],
     );
-    this.page.set(1);
+    this.setPageState(1);
     this.refresh();
   }
 
@@ -88,7 +91,7 @@ export class PlatformMoviesPageComponent {
       return;
     }
 
-    this.page.set(nextPage);
+    this.setPageState(nextPage);
     this.refresh();
   }
 
@@ -114,5 +117,20 @@ export class PlatformMoviesPageComponent {
         this.totalPages.set(response.totalPages);
         this.loading.set(false);
       });
+  }
+
+  private readPageFromUrl(): number {
+    const rawPage = Number(this.route.snapshot.queryParamMap.get('page') ?? '1');
+    return Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
+  }
+
+  private setPageState(page: number): void {
+    this.page.set(page);
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: page === 1 ? null : page },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 }

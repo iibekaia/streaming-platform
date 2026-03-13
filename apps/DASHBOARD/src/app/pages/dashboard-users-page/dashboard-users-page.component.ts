@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdminApiService } from '@streaming-platform/api-services';
 import { SubscriptionPlan, User } from '@streaming-platform/data-models';
 
@@ -10,6 +11,8 @@ import { SubscriptionPlan, User } from '@streaming-platform/data-models';
 })
 export class DashboardUsersPageComponent {
   private readonly adminApi = inject(AdminApiService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   protected readonly planLabels: Record<SubscriptionPlan, string> = {
     [SubscriptionPlan.STANDARD]: 'STANDARD',
     [SubscriptionPlan.UNLIMITED]: 'UNLIMITED',
@@ -29,6 +32,7 @@ export class DashboardUsersPageComponent {
   });
 
   constructor() {
+    this.page.set(this.readPageFromUrl());
     this.refresh();
   }
 
@@ -45,7 +49,7 @@ export class DashboardUsersPageComponent {
       return;
     }
 
-    this.page.set(nextPage);
+    this.setPageState(nextPage);
     this.refresh();
   }
 
@@ -54,6 +58,21 @@ export class DashboardUsersPageComponent {
       this.users.set(response.items);
       this.total.set(response.total);
       this.totalPages.set(response.totalPages);
+    });
+  }
+
+  private readPageFromUrl(): number {
+    const rawPage = Number(this.route.snapshot.queryParamMap.get('page') ?? '1');
+    return Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
+  }
+
+  private setPageState(page: number): void {
+    this.page.set(page);
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: page === 1 ? null : page },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
     });
   }
 }
