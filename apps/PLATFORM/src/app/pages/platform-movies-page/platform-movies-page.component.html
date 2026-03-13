@@ -79,7 +79,7 @@
     </div>
     <div class="flex flex-col gap-3 rounded-[1.5rem] border border-slate-200 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
       <p class="text-sm text-slate-500">{{ total() }} movies found. {{ pageLabel() }}.</p>
-      <div class="flex gap-2">
+      <div class="flex flex-wrap gap-2">
         <button
           type="button"
           class="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
@@ -88,6 +88,20 @@
         >
           Previous
         </button>
+        @for (pageNumber of visiblePages(); track pageNumber) {
+          <button
+            type="button"
+            class="rounded-xl border px-4 py-2 text-sm transition"
+            [class.border-indigo-600]="page() === pageNumber"
+            [class.bg-indigo-600]="page() === pageNumber"
+            [class.text-white]="page() === pageNumber"
+            [class.border-slate-200]="page() !== pageNumber"
+            [class.text-slate-700]="page() !== pageNumber"
+            (click)="changePage(pageNumber)"
+          >
+            {{ pageNumber }}
+          </button>
+        }
         <button
           type="button"
           class="rounded-xl border border-slate-200 px-4 py-2 text-sm text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"

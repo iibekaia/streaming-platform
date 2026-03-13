@@ -29,6 +29,13 @@ export class DashboardMoviesPageComponent {
   protected readonly totalPages = signal(1);
   protected readonly formatPrice = formatPrice;
   protected readonly pageLabel = computed(() => `Page ${this.page()} of ${this.totalPages()}`);
+  protected readonly visiblePages = computed(() => {
+    const totalPages = this.totalPages();
+    const currentPage = this.page();
+    const end = Math.min(totalPages, Math.max(5, currentPage + 2));
+    const start = Math.max(1, end - 4);
+    return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+  });
 
   protected readonly form = this.fb.nonNullable.group({
     imdbId: [''],
