@@ -1,5 +1,5 @@
 const LOCAL_API_BASE_URL = 'http://localhost:3000/api';
-const RAILWAY_API_BASE_URL = 'https://api.platform.com.ge/';
+const RAILWAY_API_BASE_URL = 'https://3p41kfcp.up.railway.app/api';
 const PRODUCTION_API_BASE_URL = 'https://api.platform.com.ge/api';
 
 export function resolveApiBaseUrl(): string {
